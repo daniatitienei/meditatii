@@ -18,6 +18,8 @@ class Register extends StatefulWidget {
 class RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
 
+  final myFirebase = MyFirebase();
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -28,20 +30,19 @@ class RegisterState extends State<Register> {
         width: MediaQuery.of(context).size.width,
         child: ElevatedButton(
           onPressed: () async {
-            // if (!_formKey.currentState!.validate()) return;
+            if (!_formKey.currentState!.validate()) return;
 
-            await MyFirebase().registerWithEmailAndPassword(
+            await myFirebase.registerWithEmailAndPassword(
               _emailController.text,
               _passwordController.text,
             );
 
-            print(Provider.of<MyFirebase>(context, listen: false).errorText);
-            // MyFirebase().addUser(_emailController.text, isStudent);
+            MyFirebase().addUser(_emailController.text, isStudent);
 
-            // _emailController.clear();
-            // _passwordController.clear();
+            _emailController.clear();
+            _passwordController.clear();
 
-            if (MyFirebase().auth.currentUser != null)
+            if (myFirebase.auth.currentUser != null)
               Navigator.of(context).pushNamed(Home.routeName);
           },
           style: ButtonStyle(
@@ -88,20 +89,13 @@ class RegisterState extends State<Register> {
                 TextFormField(
                   cursorColor: MyColors().purpleSixtyPercent,
                   controller: _emailController,
-                  // validator: (email) => MyFirebase().validateEmail(email),
-                  // validator: (value) => MyFirebase().errorText,
+                  validator: (email) => myFirebase.validateEmail(email),
                   style: GoogleFonts.roboto(
                     textStyle: TextStyle(
                       color: MyColors().purple,
                     ),
                   ),
                   decoration: InputDecoration(
-                    errorText: Provider.of<MyFirebase>(context, listen: false)
-                                .errorText ==
-                            null
-                        ? null
-                        : Provider.of<MyFirebase>(context, listen: false)
-                            .errorText,
                     hintText: 'Email',
                     hintStyle: TextStyle(color: MyColors().purpleSixtyPercent),
                     focusedBorder: UnderlineInputBorder(
@@ -123,7 +117,7 @@ class RegisterState extends State<Register> {
                       obscureText: true,
                       controller: _passwordController,
                       validator: (password) =>
-                          MyFirebase().validatePassword(password),
+                          myFirebase.validatePassword(password),
                       cursorColor: MyColors().purpleSixtyPercent,
                       style: GoogleFonts.roboto(
                         textStyle: TextStyle(
@@ -205,7 +199,7 @@ class RegisterState extends State<Register> {
                 Divider(
                   height: 5,
                 ),
-                MyFirebase().googleButton(context),
+                myFirebase.googleButton(context),
               ],
             ),
           ),

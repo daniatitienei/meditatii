@@ -2,6 +2,7 @@ import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
 import 'package:find_your_teacher/src/screens/favorites.dart';
 import 'package:find_your_teacher/src/screens/home.dart';
+import 'package:find_your_teacher/src/screens/inspectProfessor.dart';
 import 'package:find_your_teacher/src/screens/login.dart';
 import 'package:find_your_teacher/src/screens/register.dart';
 import 'package:find_your_teacher/src/screens/selectedCategory.dart';
@@ -12,10 +13,7 @@ import 'package:provider/provider.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => MyFirebase(),
-      child: MyApp(),
-    ),
+    MyApp(),
   );
 }
 
@@ -58,6 +56,7 @@ class _MyAppState extends State<MyApp> {
         SelectedCategory.routeName: (context) => SelectedCategory(),
         Register.routeName: (context) => Register(),
         Login.routeName: (context) => Login(),
+        InspectProfessor.routeName: (context) => InspectProfessor(),
       },
       home: FutureBuilder(
         future: _initialization,

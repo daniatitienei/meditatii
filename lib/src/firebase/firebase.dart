@@ -8,37 +8,25 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class MyFirebase with ChangeNotifier {
+class MyFirebase {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-  String? _errorText = null;
+  // Mesajul pe care-l va primi user-ul in caz de este o eroare de la firebase
+  String? _errorEmail = null;
+  String? _errorPassword = null;
 
   bool isSignedIn() {
     if (auth.currentUser == null) return false;
     return true;
   }
 
-  String? get errorText => this._errorText;
+  validateEmail(String? email) => this._errorEmail;
 
-  validateEmail(String? email) {
-    if (!EmailValidator.validate(email!))
-      return 'Adresa de email este invalida';
-  }
+  validatePassword(String? password) => this._errorPassword;
 
-  validatePassword(String? password) {
-    RegExp regNumbers = new RegExp(r'[0-9]');
-    RegExp regLowerCaseLetters = new RegExp(r'[a-z]');
-
-    if (password!.length < 8)
-      return 'Parola trebuie sa contina mai mult de 8 caractere';
-    else if (!regNumbers.hasMatch(password))
-      return 'Parola trebuie sa contina minim o cifra';
-    else if (!regLowerCaseLetters.hasMatch(password))
-      return 'Parola trebuie sa contina minim o litera mica';
-  }
-
+  // Adauga user-ul in baza colectia "users"
   Future<void> addUser(email, bool isStudent) {
     return users.add({
       'email': email,
@@ -46,6 +34,7 @@ class MyFirebase with ChangeNotifier {
     });
   }
 
+  // Inregistrare cu email si parola
   Future<void> registerWithEmailAndPassword(
       String email, String password) async {
     try {
@@ -59,15 +48,13 @@ class MyFirebase with ChangeNotifier {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         // print('The password provided is too weak.');
-        this._errorText = 'The password provided is too weak.';
-        notifyListeners();
+        this._errorPassword = 'Parola este prea slabă';
       } else if (e.code == 'email-already-in-use') {
         // print('The account already exists for that email.');
-        this._errorText = 'The account already exists for that email.';
-        notifyListeners();
+        this._errorEmail = 'Deja există un cont cu aceasta adresă de email.';
       }
     }
-    print(this._errorText);
+    // print(this._errorText);
   }
 
   Future<String> loginWithEmailAndPassword(
