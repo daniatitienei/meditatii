@@ -81,6 +81,7 @@ class SelectedCategory extends StatelessWidget {
                             description: myData['descriere'],
                             city: myData['oras'],
                             street: myData['strada'],
+                            phoneNumber: myData['numar'],
                             price: myData['pret'],
                           ),
                         );

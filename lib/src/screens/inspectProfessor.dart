@@ -2,6 +2,7 @@ import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/models/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class InspectProfessor extends StatelessWidget {
   static const String routeName = '/inspect';
@@ -78,6 +79,11 @@ class InspectProfessor extends StatelessWidget {
           ],
         ),
       );
+
+  void _openPhoneNumber(Profile profile) async =>
+      await canLaunch('tel://${profile.phoneNumber}')
+          ? await launch('tel://${profile.phoneNumber}')
+          : throw 'Could not launch ${profile.phoneNumber}';
 
   Widget _buildAbout(BuildContext context, Profile profile) => Flexible(
         child: Container(
@@ -159,47 +165,38 @@ class InspectProfessor extends StatelessWidget {
                       ],
                     ),
                   ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Contact',
-                    style: GoogleFonts.roboto(
-                      textStyle: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
                   Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 80,
-                    padding: EdgeInsets.only(top: 10, bottom: 10),
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.shade400,
-                              spreadRadius: 1,
-                              // blurRadius: 7,
-                              offset: Offset(0, 1),
+                    margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.height * 0.05,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Numar de telefon',
+                          style: GoogleFonts.roboto(
+                            textStyle: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
-                          ],
-                          shape: BoxShape.circle,
+                          ),
                         ),
-                        child: Icon(Icons.facebook),
-                      ),
-                      itemCount: 10,
-                      separatorBuilder: (context, index) => Container(
-                        width: 10,
-                      ),
+                        GestureDetector(
+                          onTap: () => _openPhoneNumber(profile),
+                          child: Container(
+                            margin: EdgeInsets.only(top: 5),
+                            child: Text(
+                              profile.phoneNumber,
+                              style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -212,6 +209,7 @@ class InspectProfessor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profile = ModalRoute.of(context)!.settings.arguments as Profile;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyColors().purple,

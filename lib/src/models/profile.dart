@@ -6,6 +6,7 @@ class Profile {
   final String city;
   final String street;
   final String description;
+  final String phoneNumber;
   final int price;
 
   Profile({
@@ -16,6 +17,7 @@ class Profile {
     required this.description,
     required this.city,
     required this.street,
+    required this.phoneNumber,
     required this.price,
   });
 }

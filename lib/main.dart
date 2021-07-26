@@ -9,7 +9,6 @@ import 'package:find_your_teacher/src/screens/register.dart';
 import 'package:find_your_teacher/src/screens/selectedCategory.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
