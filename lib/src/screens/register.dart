@@ -30,12 +30,11 @@ class RegisterState extends State<Register> {
         width: MediaQuery.of(context).size.width,
         child: ElevatedButton(
           onPressed: () async {
-            if (!_formKey.currentState!.validate()) return;
-
             await myFirebase.registerWithEmailAndPassword(
               _emailController.text,
               _passwordController.text,
             );
+            if (!_formKey.currentState!.validate()) return;
 
             MyFirebase().addUser(_emailController.text, isStudent);
 
@@ -89,7 +88,7 @@ class RegisterState extends State<Register> {
                 TextFormField(
                   cursorColor: MyColors().purpleSixtyPercent,
                   controller: _emailController,
-                  validator: (email) => myFirebase.validateEmail(email),
+                  validator: (email) => myFirebase.validateRegisterEmail(),
                   style: GoogleFonts.roboto(
                     textStyle: TextStyle(
                       color: MyColors().purple,
@@ -117,7 +116,7 @@ class RegisterState extends State<Register> {
                       obscureText: true,
                       controller: _passwordController,
                       validator: (password) =>
-                          myFirebase.validatePassword(password),
+                          myFirebase.validateRegisterPassword(),
                       cursorColor: MyColors().purpleSixtyPercent,
                       style: GoogleFonts.roboto(
                         textStyle: TextStyle(

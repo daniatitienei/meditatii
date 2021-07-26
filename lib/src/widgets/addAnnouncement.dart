@@ -1,4 +1,5 @@
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
+import 'package:find_your_teacher/src/screens/Announcement.dart';
 import 'package:flutter/material.dart';
 
 class AddAnnouncement extends StatelessWidget {
@@ -8,7 +9,7 @@ class AddAnnouncement extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton(
       backgroundColor: MyColors().purple,
-      onPressed: () {},
+      onPressed: () => Navigator.of(context).pushNamed(Announcement.routeName),
       child: Icon(
         Icons.add,
       ),

@@ -6,12 +6,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProfessorItem extends StatelessWidget {
-  const ProfessorItem({Key? key}) : super(key: key);
+  final Profile profile;
 
-  final imgUrl =
-      'https://scontent.fclj2-1.fna.fbcdn.net/v/t31.18172-8/324247_113908758721582_1720873077_o.jpg?_nc_cat=107&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=G-wTNlWUCbYAX8FX9os&_nc_ht=scontent.fclj2-1.fna&oh=2bb3d28cf3b48213e19cb16a36c26592&oe=611FD850';
-
-  final tag = 'nicola';
+  const ProfessorItem({Key? key, required this.profile}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,27 +16,27 @@ class ProfessorItem extends StatelessWidget {
       child: ListTile(
         onTap: () => Navigator.of(context).pushNamed(
           InspectProfessor.routeName,
-          arguments: Profile(url: imgUrl, tag: tag, name: 'Nicola Alin'),
+          arguments: profile,
         ),
         title: Text(
-          'Nicola Alin',
+          '${profile.firstName} ${profile.secondName}',
           style: GoogleFonts.roboto(color: MyColors().purple),
         ),
         // Animatie hero
         leading: Hero(
-          tag: tag,
+          tag: profile.tag,
           child: CircleAvatar(
-            backgroundImage: NetworkImage(imgUrl),
+            backgroundImage: NetworkImage(profile.imgUrl),
           ),
         ),
         trailing: Text(
-          '50 LEI',
+          '${profile.price} LEI',
           style: TextStyle(fontSize: 18),
         ),
         subtitle: Row(
           children: [
             Text(
-              'Strada Caransebului Nr.5',
+              profile.street,
               style: GoogleFonts.roboto(color: MyColors().purpleSixtyPercent),
             ),
           ],

@@ -1,5 +1,6 @@
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
+import 'package:find_your_teacher/src/screens/Announcement.dart';
 import 'package:find_your_teacher/src/screens/favorites.dart';
 import 'package:find_your_teacher/src/screens/home.dart';
 import 'package:find_your_teacher/src/screens/inspectProfessor.dart';
@@ -57,6 +58,7 @@ class _MyAppState extends State<MyApp> {
         Register.routeName: (context) => Register(),
         Login.routeName: (context) => Login(),
         InspectProfessor.routeName: (context) => InspectProfessor(),
+        Announcement.routeName: (context) => Announcement(),
       },
       home: FutureBuilder(
         future: _initialization,

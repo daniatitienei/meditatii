@@ -14,19 +14,31 @@ class MyFirebase {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   // Mesajul pe care-l va primi user-ul in caz de este o eroare de la firebase
-  String? _errorEmail = null;
-  String? _errorPassword = null;
+
+  String? _registerErrorEmail = null;
+  String? _registerErrorPassword = null;
+
+  String? _loginErrorEmail = null;
+  String? _loginErrorPassword = null;
 
   bool isSignedIn() {
     if (auth.currentUser == null) return false;
     return true;
   }
 
-  validateEmail(String? email) => this._errorEmail;
+  String? validateRegisterEmail() => this._registerErrorEmail;
 
-  validatePassword(String? password) => this._errorPassword;
+  String? validateRegisterPassword() => this._registerErrorPassword;
+
+  String? validateLoginEmail() => this._loginErrorEmail;
+
+  String? validateLoginPassword() {
+    print(this._loginErrorPassword);
+    return this._loginErrorPassword;
+  }
 
   // Adauga user-ul in baza colectia "users"
+
   Future<void> addUser(email, bool isStudent) {
     return users.add({
       'email': email,
@@ -35,6 +47,7 @@ class MyFirebase {
   }
 
   // Inregistrare cu email si parola
+
   Future<void> registerWithEmailAndPassword(
       String email, String password) async {
     try {
@@ -46,31 +59,31 @@ class MyFirebase {
 
       await loginWithEmailAndPassword(email, password);
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        // print('The password provided is too weak.');
-        this._errorPassword = 'Parola este prea slabă';
-      } else if (e.code == 'email-already-in-use') {
-        // print('The account already exists for that email.');
-        this._errorEmail = 'Deja există un cont cu aceasta adresă de email.';
-      }
+      if (e.code == 'weak-password')
+        this._registerErrorPassword = 'Parola este prea slabă';
+      else if (e.code == 'email-already-in-use')
+        this._registerErrorEmail =
+            'Deja există un cont cu aceasta adresă de email.';
     }
-    // print(this._errorText);
   }
 
-  Future<String> loginWithEmailAndPassword(
-      String email, String password) async {
+  // Autentificare cu email si parola
+
+  Future<void> loginWithEmailAndPassword(String email, String password) async {
+    // FIXME Sa-si schimbe valoarea
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        return 'No user found for that email.';
-      } else if (e.code == 'wrong-password') {
-        return 'Wrong password provided for that user.';
-      }
+      if (e.code == 'user-not-found')
+        this._loginErrorEmail =
+            'Nu există niciun utilizator cu aceasta adresa.';
+      else if (e.code == 'wrong-password')
+        this._loginErrorPassword = 'Parolă incorectă.';
     }
-    return 'text';
   }
+
+  // Autentificare cu Google
 
   Future<UserCredential> signInWithGoogle() async {
     GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();

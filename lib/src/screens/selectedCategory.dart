@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/models/categoryTitle.dart';
+import 'package:find_your_teacher/src/models/profile.dart';
 import 'package:find_your_teacher/src/widgets/addAnnouncement.dart';
 
 import 'package:find_your_teacher/src/widgets/professorItem.dart';
@@ -70,7 +71,19 @@ class SelectedCategory extends StatelessWidget {
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
                         final myData = snapshot.data!.get('anunturi')[index];
-                        return ProfessorItem();
+
+                        return ProfessorItem(
+                          profile: Profile(
+                            imgUrl: myData['imgUrl'],
+                            tag: myData['tag'],
+                            firstName: myData['nume'],
+                            secondName: myData['prenume'],
+                            description: myData['descriere'],
+                            city: myData['oras'],
+                            street: myData['strada'],
+                            price: myData['pret'],
+                          ),
+                        );
                       },
                       childCount: snapshot.data!.get('anunturi').length,
                     ),
