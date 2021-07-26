@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "834293774562-6kbl4a4gsajfmq3m53bn8q58a93lqq3v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.find_your_teacher",
+            "certificate_hash": "d5cb6763e022a1ef0ae671455d9abecfdfeab53e"
+          }
+        },
+        {
           "client_id": "834293774562-3o8ppt3dp1dct3e5q773jks56f2e90u1.apps.googleusercontent.com",
           "client_type": 3
         }

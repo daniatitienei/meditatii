@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:find_your_teacher/src/screens/home.dart';
 import 'package:find_your_teacher/src/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -86,7 +85,7 @@ class MyFirebase {
   // Autentificare cu Google
 
   Future<UserCredential> signInWithGoogle() async {
-    GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
     final GoogleSignInAuthentication googleAuth =
         await googleUser!.authentication;
@@ -110,8 +109,8 @@ class MyFirebase {
   Widget googleButton(context) => Container(
         width: MediaQuery.of(context).size.width,
         child: ElevatedButton(
-          onPressed: () {
-            signInWithGoogle();
+          onPressed: () async {
+            await signInWithGoogle();
             Navigator.of(context)
                 .pushNamedAndRemoveUntil(Home.routeName, (route) => false);
           },
