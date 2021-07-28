@@ -25,14 +25,14 @@ class _LoginState extends State<Login> {
         width: MediaQuery.of(context).size.width,
         child: ElevatedButton(
           onPressed: () async {
-            await MyFirebase().loginWithEmailAndPassword(
+            await MyFirebaseAuth().loginWithEmailAndPassword(
               _emailController.text,
               _passwordController.text,
             );
 
             if (!_formKey.currentState!.validate()) return;
 
-            if (MyFirebase().auth.currentUser != null)
+            if (MyFirebaseAuth().auth.currentUser != null)
               Navigator.of(context)
                   .pushNamedAndRemoveUntil(Home.routeName, (route) => false);
           },
@@ -80,7 +80,7 @@ class _LoginState extends State<Login> {
                 TextFormField(
                   controller: _emailController,
                   cursorColor: MyColors().purpleSixtyPercent,
-                  validator: (email) => MyFirebase().validateLoginEmail(),
+                  validator: (email) => MyFirebaseAuth().validateLoginEmail(),
                   style: GoogleFonts.roboto(
                     textStyle: TextStyle(
                       color: MyColors().purple,
@@ -107,7 +107,7 @@ class _LoginState extends State<Login> {
                     TextFormField(
                       controller: _passwordController,
                       validator: (password) =>
-                          MyFirebase().validateLoginPassword(),
+                          MyFirebaseAuth().validateLoginPassword(),
                       cursorColor: MyColors().purpleSixtyPercent,
                       obscureText: true,
                       style: GoogleFonts.roboto(
@@ -198,7 +198,7 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
-                MyFirebase().googleButton(context),
+                MyFirebaseAuth().googleButton(context),
               ],
             ),
           ),

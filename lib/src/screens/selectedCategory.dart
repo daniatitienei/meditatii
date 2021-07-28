@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/models/categoryTitle.dart';
 import 'package:find_your_teacher/src/models/profile.dart';
+import 'package:find_your_teacher/src/screens/filters.dart';
 import 'package:find_your_teacher/src/widgets/addAnnouncement.dart';
 
 import 'package:find_your_teacher/src/widgets/professorItem.dart';
@@ -47,6 +48,16 @@ class SelectedCategory extends StatelessWidget {
                   snap: true,
                   expandedHeight: 80,
                   backgroundColor: Colors.white,
+                  actions: [
+                    IconButton(
+                      onPressed: () =>
+                          Navigator.of(context).pushNamed(Filters.routeName),
+                      icon: Icon(
+                        Icons.filter_list,
+                      ),
+                      color: MyColors().purple,
+                    ),
+                  ],
                   leading: IconButton(
                     onPressed: () => Navigator.of(context).pop(),
                     icon: Icon(
@@ -74,14 +85,17 @@ class SelectedCategory extends StatelessWidget {
 
                         return ProfessorItem(
                           profile: Profile(
+                            uuid: myData['uuid'],
                             imgUrl: myData['imgUrl'],
                             tag: myData['tag'],
                             firstName: myData['nume'],
                             secondName: myData['prenume'],
+                            email: myData['email'],
                             description: myData['descriere'],
                             city: myData['oras'],
                             street: myData['strada'],
                             phoneNumber: myData['numar'],
+                            materie: myData['materie'],
                             price: myData['pret'],
                           ),
                         );

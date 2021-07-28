@@ -33,13 +33,10 @@ class ProfessorItem extends StatelessWidget {
           '${profile.price} LEI',
           style: TextStyle(fontSize: 18),
         ),
-        subtitle: Row(
-          children: [
-            Text(
-              profile.street,
-              style: GoogleFonts.roboto(color: MyColors().purpleSixtyPercent),
-            ),
-          ],
+        subtitle: Text(
+          profile.street,
+          overflow: TextOverflow.ellipsis,
+          style: GoogleFonts.roboto(color: MyColors().purpleSixtyPercent),
         ),
       ),
     );

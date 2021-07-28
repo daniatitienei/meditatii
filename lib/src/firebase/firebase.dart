@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_your_teacher/src/models/profile.dart';
 import 'package:find_your_teacher/src/screens/home.dart';
 import 'package:find_your_teacher/src/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,8 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:path_provider/path_provider.dart';
 
-class MyFirebase {
+class MyFirebaseAuth {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -20,10 +25,7 @@ class MyFirebase {
   String? _loginErrorEmail = null;
   String? _loginErrorPassword = null;
 
-  bool isSignedIn() {
-    if (auth.currentUser == null) return false;
-    return true;
-  }
+  bool isSignedIn() => auth.currentUser == null ? false : true;
 
   String? validateRegisterEmail() => this._registerErrorEmail;
 
@@ -31,19 +33,13 @@ class MyFirebase {
 
   String? validateLoginEmail() => this._loginErrorEmail;
 
-  String? validateLoginPassword() {
-    print(this._loginErrorPassword);
-    return this._loginErrorPassword;
-  }
+  String? validateLoginPassword() => this._loginErrorPassword;
 
   // Adauga user-ul in baza colectia "users"
 
-  Future<void> addUser(email, bool isStudent) {
-    return users.add({
-      'email': email,
-      'isStudent': isStudent,
-    });
-  }
+  Future<void> addUser(email, bool isStudent) => users.doc(email).set({
+        'isStudent': isStudent,
+      });
 
   // Inregistrare cu email si parola
 
@@ -147,4 +143,144 @@ class MyFirebase {
           ),
         ),
       );
+}
+
+class MyFirebaseStorage {
+  firebase_storage.FirebaseStorage storage =
+      firebase_storage.FirebaseStorage.instance;
+
+  getImageUrl(String fileName) async {
+    var ref = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child("poze_profesori/${fileName}");
+    String url = (await ref.getDownloadURL()).toString();
+    return url;
+  }
+
+  Future<void> uploadFile(String filePath, String fileName) async {
+    File file = File(filePath);
+
+    try {
+      await firebase_storage.FirebaseStorage.instance
+          .ref('poze_profesori/${fileName}')
+          .putFile(file);
+    } catch (e) {
+      print(e);
+    }
+  }
+}
+
+class MyFirestore {
+  Future<void> addAnnouncement(Profile profile) {
+    CollectionReference materii =
+        FirebaseFirestore.instance.collection('materii');
+    return materii
+        .doc(profile.materie)
+        .update({
+          'anunturi': FieldValue.arrayUnion(
+            [
+              {
+                'uuid': profile.uuid,
+                'nume': profile.firstName,
+                'prenume': profile.secondName,
+                'descriere': profile.description,
+                'materie': profile.materie,
+                'oras': profile.city,
+                'strada': profile.street,
+                'numar': profile.phoneNumber,
+                'pret': profile.price,
+                'imgUrl': profile.imgUrl,
+                'tag': profile.tag,
+                'email': profile.email,
+              },
+            ],
+          ),
+        })
+        .then((value) => print('updated'))
+        .catchError((err) => print('nu a fost updatat'));
+  }
+
+  bool _isFav = false;
+
+  set isFav(bool newVal) => _isFav = newVal;
+  bool get getIsFav => _isFav;
+
+  Future<void> isFavorite(Profile profile) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(MyFirebaseAuth().auth.currentUser!.email)
+        .get()
+        .then(
+      (DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          var data = documentSnapshot.data() as Map;
+
+          data['favorite'].forEach((element) {
+            if (element['uuid'] == profile.uuid) {
+              isFav = true;
+            }
+          });
+        } else {
+          isFav = false;
+        }
+      },
+    );
+  }
+
+  Future<void> newFavorite(Profile profile) {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    return users
+        .doc(MyFirebaseAuth().auth.currentUser!.email)
+        .update({
+          'favorite': FieldValue.arrayUnion(
+            [
+              {
+                'uuid': profile.uuid,
+                'nume': profile.firstName,
+                'prenume': profile.secondName,
+                'descriere': profile.description,
+                'materie': profile.materie,
+                'oras': profile.city,
+                'strada': profile.street,
+                'numar': profile.phoneNumber,
+                'pret': profile.price,
+                'imgUrl': profile.imgUrl,
+                'tag': profile.tag,
+                'email': profile.email,
+              },
+            ],
+          ),
+        })
+        .then((value) => isFav = true)
+        .catchError((err) => print('nu a fost updatat'));
+  }
+
+  Future<void> removeFavorite(Profile profile) {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+    return users
+        .doc(MyFirebaseAuth().auth.currentUser!.email)
+        .update({
+          'favorite': FieldValue.arrayRemove(
+            [
+              {
+                'uuid': profile.uuid,
+                'nume': profile.firstName,
+                'prenume': profile.secondName,
+                'descriere': profile.description,
+                'materie': profile.materie,
+                'oras': profile.city,
+                'strada': profile.street,
+                'numar': profile.phoneNumber,
+                'pret': profile.price,
+                'imgUrl': profile.imgUrl,
+                'tag': profile.tag,
+                'email': profile.email,
+              },
+            ],
+          )
+        })
+        .then((value) => isFav = false)
+        .catchError((err) => print('nu a fost updatat'));
+  }
 }

@@ -18,7 +18,7 @@ class Register extends StatefulWidget {
 class RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
 
-  final myFirebase = MyFirebase();
+  final myFirebase = MyFirebaseAuth();
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -36,7 +36,7 @@ class RegisterState extends State<Register> {
             );
             if (!_formKey.currentState!.validate()) return;
 
-            MyFirebase().addUser(_emailController.text, isStudent);
+            MyFirebaseAuth().addUser(_emailController.text, isStudent);
 
             _emailController.clear();
             _passwordController.clear();
@@ -175,7 +175,20 @@ class RegisterState extends State<Register> {
                   spacing: 10,
                   selectedColor: MyColors().purple,
                   borderRadius: BorderRadius.circular(10),
+                  unselectedColor: MyColors().purpleSixtyPercent,
+                  selectedShadow: <BoxShadow>[
+                    BoxShadow(color: Colors.transparent)
+                  ],
+                  unselectedShadow: <BoxShadow>[
+                    BoxShadow(color: Colors.transparent)
+                  ],
                   selectedTextStyle: GoogleFonts.roboto(
+                    textStyle: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  unselectedTextStyle: GoogleFonts.roboto(
                     textStyle: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,

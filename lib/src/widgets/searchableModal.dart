@@ -5,22 +5,24 @@ import 'package:google_fonts/google_fonts.dart';
 class Searchable extends StatefulWidget {
   final List<String> data;
   final String defaultValue;
+  final Function callBack;
 
   const Searchable({
     required this.data,
     required this.defaultValue,
+    required this.callBack,
     Key? key,
   }) : super(key: key);
 
   @override
   _SearchableState createState() => _SearchableState();
 }
+// TODO SA DEA VALOAREA INAPOI
 
 class _SearchableState extends State<Searchable> {
   final TextEditingController _searchController = TextEditingController();
 
-  List<String> data = [];
-  List<String> _foundSearches = [];
+  List<String> data = [], _foundSearches = [];
 
   String? _selectedItem;
 
@@ -46,34 +48,53 @@ class _SearchableState extends State<Searchable> {
           padding: EdgeInsets.only(left: 15, right: 15),
           child: Column(
             children: [
-              TextField(
-                onChanged: (value) => _runFilter(value),
-                controller: _searchController,
-                cursorColor: MyColors().purple,
-                style: GoogleFonts.roboto(
-                  textStyle: TextStyle(color: MyColors().purple),
-                ),
-                decoration: InputDecoration(
-                  hintText: 'Scrieti aici',
-                  hintStyle: GoogleFonts.roboto(
-                    color: MyColors().purpleSixtyPercent,
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(right: 5),
+                    child: Icon(
+                      Icons.search,
+                      color: MyColors().purple,
+                    ),
                   ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: MyColors().purple),
+                  Expanded(
+                    child: TextField(
+                      onChanged: (value) => _runFilter(value),
+                      controller: _searchController,
+                      cursorColor: MyColors().purple,
+                      style: GoogleFonts.roboto(
+                        textStyle: TextStyle(color: MyColors().purple),
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'Scrieti aici',
+                        hintStyle: GoogleFonts.roboto(
+                          color: MyColors().purpleSixtyPercent,
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                      ),
+                    ),
                   ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: MyColors().purpleSixtyPercent),
-                  ),
-                ),
+                ],
+              ),
+              Divider(
+                thickness: 1,
+                color: MyColors().purple,
               ),
               Expanded(
                 child: ListView.builder(
                   itemBuilder: (context, index) => ListTile(
                     onTap: () {
+                      widget.callBack(_foundSearches[index]);
+
                       setState(() {
                         _selectedItem = _foundSearches[index];
                       });
+
                       Navigator.of(context).pop();
                     },
                     leading: Text(_foundSearches[index]),

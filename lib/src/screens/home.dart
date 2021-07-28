@@ -77,7 +77,7 @@ class Home extends StatelessWidget {
                       backgroundColor: Colors.white,
                       actions: [
                         IconButton(
-                          onPressed: () => MyFirebase().signOut(context),
+                          onPressed: () => MyFirebaseAuth().signOut(context),
                           icon: Icon(
                             Icons.remove_done_rounded,
                           ),
@@ -112,33 +112,6 @@ class Home extends StatelessWidget {
           );
         },
       ),
-
-      // SafeArea(
-      //   child: CustomScrollView(
-      //     slivers: <Widget>[
-      //       SliverAppBar(
-      //         floating: true,
-      //         pinned: true,
-      //         snap: false,
-      //         expandedHeight: 80,
-      //         backgroundColor: Colors.white,
-      //         flexibleSpace: FlexibleSpaceBar(
-      //           title: Text(
-      //             'Categorii',
-      //             style: GoogleFonts.roboto(color: MyColors().purple),
-      //           ),
-      //         ),
-      //       ),
-      //       SliverList(
-      //         delegate: SliverChildBuilderDelegate(
-      //           (BuildContext context, int index) =>
-      //               Materie(MyColors().orange, MyColors().lightOrange),
-      //           childCount: 12,
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }

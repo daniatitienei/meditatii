@@ -2,6 +2,7 @@ import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
 import 'package:find_your_teacher/src/screens/Announcement.dart';
 import 'package:find_your_teacher/src/screens/favorites.dart';
+import 'package:find_your_teacher/src/screens/filters.dart';
 import 'package:find_your_teacher/src/screens/home.dart';
 import 'package:find_your_teacher/src/screens/inspectProfessor.dart';
 import 'package:find_your_teacher/src/screens/login.dart';
@@ -58,15 +59,16 @@ class _MyAppState extends State<MyApp> {
         Login.routeName: (context) => Login(),
         InspectProfessor.routeName: (context) => InspectProfessor(),
         Announcement.routeName: (context) => Announcement(),
+        Filters.routeName: (context) => Filters(),
       },
       home: FutureBuilder(
         future: _initialization,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done &&
-              !MyFirebase().isSignedIn())
+              !MyFirebaseAuth().isSignedIn())
             return Login();
           else if (snapshot.connectionState == ConnectionState.done &&
-              MyFirebase().isSignedIn()) return Home();
+              MyFirebaseAuth().isSignedIn()) return Home();
           return Center(
             child: MaterialApp(
               home: Scaffold(

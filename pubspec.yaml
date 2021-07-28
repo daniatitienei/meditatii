@@ -35,8 +35,11 @@ dependencies:
   group_button: ^3.0.1
   http: ^0.13.3
   image_picker: ^0.8.2
+  mailto: ^2.0.0
+  path_provider: ^2.0.2
   provider: ^5.0.0
   url_launcher: ^6.0.9
+  uuid: ^3.0.4
 
 dev_dependencies:
   flutter_test:
@@ -55,6 +58,8 @@ flutter:
   assets:
     - lib/src/assets/svg/graduation-hat.svg
     - lib/src/assets/svg/google.svg
+    - lib/src/assets/svg/user.svg
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
