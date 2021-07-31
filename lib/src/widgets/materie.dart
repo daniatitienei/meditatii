@@ -9,7 +9,7 @@ class Materie extends StatelessWidget {
   final Color circleColor;
   final Color backgroundColor;
   final String title;
-  final int announces;
+  final announces;
   final String imageUrl;
 
   const Materie(
@@ -23,81 +23,62 @@ class Materie extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(
-        SelectedCategory.routeName,
-        arguments: CategoryTitle(title: this.title),
-      ),
-      child: Container(
-        color: this.backgroundColor,
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.fromLTRB(
-          MediaQuery.of(context).size.width * 0.08,
-          10,
-          MediaQuery.of(context).size.width * 0.08,
-          10,
+    return Container(
+      margin: EdgeInsets.only(bottom: 10),
+      child: ListTile(
+        onTap: () => Navigator.of(context).pushNamed(
+          SelectedCategory.routeName,
+          arguments: CategoryTitle(title: this.title),
         ),
-        margin: EdgeInsets.only(bottom: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: this.circleColor,
-                  ),
-                  child: SvgPicture.network(
-                    this.imageUrl,
-                    width: 40,
-                    height: 40,
-                    placeholderBuilder: (context) => SvgPicture.asset(
-                      'lib/src/assets/svg/graduation-hat.svg',
-                      width: 40,
-                      height: 40,
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 25),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        this.title,
-                        style: GoogleFonts.roboto(
-                          textStyle: TextStyle(
-                            color: MyColors().purple,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        '${this.announces} anunturi',
-                        style: GoogleFonts.roboto(
-                          textStyle: TextStyle(
-                            color: MyColors().purple,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+        contentPadding: EdgeInsets.fromLTRB(
+          MediaQuery.of(context).size.width * 0.08,
+          5,
+          MediaQuery.of(context).size.width * 0.08,
+          5,
+        ),
+        tileColor: this.backgroundColor,
+        leading: Container(
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: this.circleColor,
+          ),
+          child: SvgPicture.network(
+            this.imageUrl,
+            width: 40,
+            height: 40,
+            placeholderBuilder: (context) => SvgPicture.asset(
+              'lib/src/assets/svg/graduation-hat.svg',
+              width: 40,
+              height: 40,
             ),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: MyColors().purple,
-              ),
+          ),
+        ),
+        title: Text(
+          this.title,
+          overflow: TextOverflow.ellipsis,
+          style: GoogleFonts.roboto(
+            textStyle: TextStyle(
+              color: MyColors().purple,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
             ),
-          ],
+          ),
+        ),
+        subtitle: Text(
+          '${this.announces} anunțuri',
+          overflow: TextOverflow.ellipsis,
+          style: GoogleFonts.roboto(
+            textStyle: TextStyle(
+              color: MyColors().purple,
+              fontSize: 14,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+        ),
+        trailing: Icon(
+          Icons.arrow_forward_ios_rounded,
+          color: MyColors().purple,
         ),
       ),
     );

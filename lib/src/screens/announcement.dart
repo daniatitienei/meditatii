@@ -449,7 +449,10 @@ class _AnnouncementState extends State<Announcement> {
                           ),
                         ),
                         backgroundColor: MaterialStateProperty.all(
-                          (oras == '' || materie == '' || gen == '')
+                          (oras == '' ||
+                                  materie == '' ||
+                                  gen == '' ||
+                                  _imageFileList?.length == null)
                               ? MyColors().purpleSixtyPercent
                               : MyColors().purple,
                         ),

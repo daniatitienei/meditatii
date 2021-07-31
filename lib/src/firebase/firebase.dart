@@ -10,7 +10,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:path_provider/path_provider.dart';
 
 class MyFirebaseAuth {
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -46,8 +45,7 @@ class MyFirebaseAuth {
   Future<void> registerWithEmailAndPassword(
       String email, String password) async {
     try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -172,29 +170,24 @@ class MyFirebaseStorage {
 
 class MyFirestore {
   Future<void> addAnnouncement(Profile profile) {
-    CollectionReference materii =
-        FirebaseFirestore.instance.collection('materii');
+    CollectionReference materii = FirebaseFirestore.instance
+        .collection('materii/${profile.materie}/anunturi');
+
     return materii
-        .doc(profile.materie)
-        .update({
-          'anunturi': FieldValue.arrayUnion(
-            [
-              {
-                'uuid': profile.uuid,
-                'nume': profile.firstName,
-                'prenume': profile.secondName,
-                'descriere': profile.description,
-                'materie': profile.materie,
-                'oras': profile.city,
-                'strada': profile.street,
-                'numar': profile.phoneNumber,
-                'pret': profile.price,
-                'imgUrl': profile.imgUrl,
-                'tag': profile.tag,
-                'email': profile.email,
-              },
-            ],
-          ),
+        .add({
+          'uuid': profile.uuid,
+          'nume': profile.firstName,
+          'prenume': profile.secondName,
+          'descriere': profile.description,
+          'materie': profile.materie,
+          'oras': profile.city,
+          'strada': profile.street,
+          'numar': profile.phoneNumber,
+          'pret': profile.price,
+          'imgUrl': profile.imgUrl,
+          'tag': profile.tag,
+          'email': profile.email,
+          'date': DateTime.now(),
         })
         .then((value) => print('updated'))
         .catchError((err) => print('nu a fost updatat'));

@@ -1,13 +1,16 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
 import 'package:find_your_teacher/src/screens/favorites.dart';
-import 'package:find_your_teacher/src/screens/selectedCategory.dart';
-import 'package:find_your_teacher/src/widgets/addAnnouncement.dart';
 
+import 'package:find_your_teacher/src/widgets/addAnnouncement.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:find_your_teacher/src/widgets/materie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Home extends StatelessWidget {
@@ -56,7 +59,7 @@ class Home extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
             return Center(
-              child: TargetPlatform.android == true
+              child: Platform.isAndroid == true
                   ? CircularProgressIndicator(
                       color: MyColors().purple,
                     )
@@ -93,14 +96,80 @@ class Home extends StatelessWidget {
                     ),
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) => Materie(
-                          circleColor: MyColors().circleColors[index],
-                          backgroundColor: MyColors().backgroundColors[index],
-                          title: snapshot.data!.docs[index].id,
-                          announces:
-                              snapshot.data!.docs[index]['anunturi'].length,
-                          imageUrl: snapshot.data!.docs[index]['imageUrl'],
-                        ),
+                        (BuildContext context, int index) => StreamBuilder<
+                                QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection(
+                                  'materii/${snapshot.data!.docs[index].id}/anunturi',
+                                )
+                                .snapshots(),
+                            builder: (context, snapshot2) {
+                              if (snapshot2.connectionState ==
+                                  ConnectionState.waiting)
+                                return Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade400,
+                                  highlightColor: Colors.grey.shade300,
+                                  child: Container(
+                                    margin: EdgeInsets.only(bottom: 10),
+                                    child: Shimmer.fromColors(
+                                      baseColor: Colors.grey.shade400,
+                                      highlightColor: Colors.grey.shade300,
+                                      child: ListTile(
+                                        contentPadding: EdgeInsets.fromLTRB(
+                                          MediaQuery.of(context).size.width *
+                                              0.08,
+                                          5,
+                                          MediaQuery.of(context).size.width *
+                                              0.08,
+                                          5,
+                                        ),
+                                        leading: Shimmer.fromColors(
+                                          baseColor: Colors.grey.shade400,
+                                          highlightColor: Colors.grey.shade300,
+                                          child: Container(
+                                            padding: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              color: Colors.green,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: SvgPicture.asset(
+                                              'lib/src/assets/svg/graduation-hat.svg',
+                                              width: 40,
+                                              height: 40,
+                                            ),
+                                          ),
+                                        ),
+                                        title: Shimmer.fromColors(
+                                          baseColor: Colors.grey.shade400,
+                                          highlightColor: Colors.grey.shade300,
+                                          child: Container(
+                                            height: 15,
+                                            color: Colors.green,
+                                          ),
+                                        ),
+                                        subtitle: Shimmer.fromColors(
+                                          baseColor: Colors.grey.shade400,
+                                          highlightColor: Colors.grey.shade300,
+                                          child: Container(
+                                            height: 10,
+                                            color: Colors.green,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+
+                              return Materie(
+                                circleColor: MyColors().circleColors[index],
+                                backgroundColor:
+                                    MyColors().backgroundColors[index],
+                                title: snapshot.data!.docs[index].id,
+                                announces: snapshot2.data?.size,
+                                imageUrl: snapshot.data!.docs[index]
+                                    ['imageUrl'],
+                              );
+                            }),
                         childCount: snapshot.data?.docs.length,
                       ),
                     ),

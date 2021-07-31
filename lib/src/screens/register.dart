@@ -5,7 +5,6 @@ import 'package:find_your_teacher/src/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:group_button/group_button.dart';
-import 'package:provider/provider.dart';
 
 class Register extends StatefulWidget {
   static const String routeName = '/register';

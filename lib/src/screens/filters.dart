@@ -1,4 +1,5 @@
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
+import 'package:find_your_teacher/src/models/typeOfFilters.dart';
 import 'package:find_your_teacher/src/widgets/searchableModal.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,6 +15,19 @@ class Filters extends StatefulWidget {
 
 class _FiltersState extends State<Filters> {
   String? oras;
+
+  List<String> orase = [
+        'Resita',
+        'Bucuresti',
+        'Timisoara',
+      ],
+      ordonareArr = [
+        'Crescător',
+        'Descrescător',
+        'Noi',
+      ];
+
+  String ordonare = 'Noi';
 
   @override
   Widget build(BuildContext context) {
@@ -68,9 +82,12 @@ class _FiltersState extends State<Filters> {
                         margin: EdgeInsets.only(top: 10),
                         child: GroupButton(
                           isRadio: true,
-                          selectedButton: 0,
-                          buttons: ['Crescător', 'Descrescător', 'Noi'],
-                          onSelected: (index, isSelected) {},
+                          selectedButton: 2,
+                          mainGroupAlignment: MainGroupAlignment.start,
+                          buttons: ordonareArr,
+                          onSelected: (index, isSelected) {
+                            this.ordonare = this.ordonareArr[index];
+                          },
                           spacing: 10,
                           selectedColor: MyColors().purple,
                           unselectedColor: MyColors().purpleSixtyPercent,
@@ -110,7 +127,7 @@ class _FiltersState extends State<Filters> {
                         ),
                       ),
                       Searchable(
-                        data: ['Resita', 'Bucuresti', 'Timisoara'],
+                        data: orase,
                         defaultValue: 'Alegeți locația',
                         callBack: (String newVal) {
                           setState(() {
@@ -126,7 +143,12 @@ class _FiltersState extends State<Filters> {
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.only(bottom: 10),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    TypeOfFilters filtre = TypeOfFilters();
+
+                    filtre.setLocatie = this.oras ?? this.oras as String;
+                    filtre.setOrdonare = this.ordonare;
+                  },
                   style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.all(MyColors().purple),

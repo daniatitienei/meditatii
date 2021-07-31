@@ -1,5 +1,6 @@
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
+import 'package:find_your_teacher/src/models/typeOfFilters.dart';
 import 'package:find_your_teacher/src/screens/Announcement.dart';
 import 'package:find_your_teacher/src/screens/favorites.dart';
 import 'package:find_your_teacher/src/screens/filters.dart';
@@ -10,11 +11,15 @@ import 'package:find_your_teacher/src/screens/register.dart';
 import 'package:find_your_teacher/src/screens/selectedCategory.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
-    MyApp(),
+    ChangeNotifierProvider(
+      create: (context) => TypeOfFilters(),
+      child: MyApp(),
+    ),
   );
 }
 

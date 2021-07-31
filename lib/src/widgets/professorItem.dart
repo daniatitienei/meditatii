@@ -2,7 +2,6 @@ import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/models/profile.dart';
 import 'package:find_your_teacher/src/screens/inspectProfessor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProfessorItem extends StatelessWidget {
@@ -20,6 +19,7 @@ class ProfessorItem extends StatelessWidget {
         ),
         title: Text(
           '${profile.firstName} ${profile.secondName}',
+          overflow: TextOverflow.ellipsis,
           style: GoogleFonts.roboto(color: MyColors().purple),
         ),
         // Animatie hero
