@@ -1,3 +1,4 @@
+import 'package:find_your_teacher/src/admob/admob.dart';
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
 import 'package:find_your_teacher/src/screens/home.dart';
@@ -5,6 +6,7 @@ import 'package:find_your_teacher/src/screens/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class Login extends StatefulWidget {
   static const String routeName = '/login';
@@ -21,6 +23,8 @@ class _LoginState extends State<Login> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  InterstitialAd? _interstitialAd;
+
   Widget _buildLoginButton() => Container(
         margin: EdgeInsets.only(top: 10),
         width: MediaQuery.of(context).size.width,
@@ -33,6 +37,8 @@ class _LoginState extends State<Login> {
 
             if (!_formKey.currentState!.validate()) return;
 
+            this._interstitialAd!.show();
+
             showToast(
               'Conectarea a fost realizată cu succes.',
               context: context,
@@ -40,7 +46,7 @@ class _LoginState extends State<Login> {
               position: StyledToastPosition.top,
               reverseAnimation: StyledToastAnimation.fade,
               animDuration: Duration(seconds: 1),
-              duration: Duration(seconds: 2),
+              duration: Duration(seconds: 5),
               curve: Curves.elasticOut,
               reverseCurve: Curves.linear,
             );
@@ -68,6 +74,22 @@ class _LoginState extends State<Login> {
           ),
         ),
       );
+
+  @override
+  void initState() {
+    super.initState();
+    InterstitialAd.load(
+        adUnitId: AdMob().interstitialAdId,
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            this._interstitialAd = ad;
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            print('InterstitialAd failed to load: $error');
+          },
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {

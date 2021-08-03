@@ -1,8 +1,10 @@
+import 'package:find_your_teacher/src/admob/admob.dart';
 import 'package:flutter/material.dart';
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
 import 'package:find_your_teacher/src/models/profile.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mailto/mailto.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -16,6 +18,13 @@ class InspectProf extends StatefulWidget {
 
 class _InspectProfState extends State<InspectProf> {
   bool isFav = false;
+
+  final BannerAd myBanner = BannerAd(
+    adUnitId: AdMob().bannerAdId,
+    size: AdSize.banner,
+    request: AdRequest(),
+    listener: BannerAdListener(),
+  );
 
   Widget _buildCard(BuildContext context, Profile profile) => Container(
         width: MediaQuery.of(context).size.width,
@@ -248,6 +257,7 @@ class _InspectProfState extends State<InspectProf> {
   @override
   void initState() {
     super.initState();
+    myBanner.load();
     Future.delayed(
       Duration.zero,
       () async {
@@ -299,10 +309,24 @@ class _InspectProfState extends State<InspectProf> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildCard(context, widget.profile),
-            _buildAbout(context, widget.profile),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildCard(context, widget.profile),
+                  _buildAbout(context, widget.profile),
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 10),
+              height: 50,
+              child: AdWidget(
+                ad: myBanner,
+              ),
+            ),
           ],
         ),
       ),

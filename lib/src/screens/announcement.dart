@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:find_your_teacher/src/admob/admob.dart';
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
 import 'package:find_your_teacher/src/models/city.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
@@ -43,6 +45,7 @@ class _AnnouncementState extends State<Announcement> {
   final _formKey = GlobalKey<FormState>();
 
   final RegExp numberRegExp = RegExp(r'[0-9]');
+  InterstitialAd? _interstitialAd;
 
   final List<String> materii = [
     'Matematică',
@@ -338,6 +341,17 @@ class _AnnouncementState extends State<Announcement> {
   void initState() {
     super.initState();
     cities = fetchCities();
+    InterstitialAd.load(
+        adUnitId: AdMob().interstitialAdId,
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            this._interstitialAd = ad;
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            print('InterstitialAd failed to load: $error');
+          },
+        ));
   }
 
   @override
@@ -498,6 +512,8 @@ class _AnnouncementState extends State<Announcement> {
                                 curve: Curves.elasticOut,
                                 reverseCurve: Curves.linear,
                               );
+
+                              this._interstitialAd!.show();
 
                               Navigator.of(context).pop();
                             },

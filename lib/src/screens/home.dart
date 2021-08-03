@@ -26,7 +26,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   InterstitialAd? _interstitialAd;
   final BannerAd myBanner = BannerAd(
-    adUnitId: AdMob().homeAdId,
+    adUnitId: AdMob().bannerAdId,
     size: AdSize.banner,
     request: AdRequest(),
     listener: BannerAdListener(),
@@ -60,24 +60,35 @@ class _HomeState extends State<Home> {
           ],
         ),
       );
+  int _page = 0;
 
   @override
   void initState() {
     super.initState();
     myBanner.load();
     InterstitialAd.load(
-        adUnitId: AdMob().betweenProfessors,
+        adUnitId: AdMob().interstitialAdId,
         request: AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
-            // Keep a reference to the ad so you can show it later.
-            print('done');
             this._interstitialAd = ad;
           },
           onAdFailedToLoad: (LoadAdError error) {
             print('InterstitialAd failed to load: $error');
           },
         ));
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    _onPageChanged(_page);
+  }
+
+  void _onPageChanged(int page) {
+    setState(
+      () => _page = page,
+    );
   }
 
   @override
@@ -124,7 +135,6 @@ class _HomeState extends State<Home> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
             return Container(
-              margin: EdgeInsets.only(top: 70),
               height: MediaQuery.of(context).size.height,
               child: ListView.builder(
                 shrinkWrap: true,
@@ -148,6 +158,7 @@ class _HomeState extends State<Home> {
             );
 
           return PageView(
+            onPageChanged: _onPageChanged,
             controller: _pageController,
             children: [
               SafeArea(
