@@ -38,6 +38,7 @@ android {
         applicationId "com.example.find_your_teacher"
         minSdkVersion 21
         targetSdkVersion 30
+        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -62,4 +63,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
+    implementation("com.android.support:multidex:1.0.3")
+    implementation 'com.google.android.gms:play-services-ads:20.2.0'
 }

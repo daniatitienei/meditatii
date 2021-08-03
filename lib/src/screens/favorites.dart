@@ -16,71 +16,78 @@ class Favorites extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder(
-        stream: _favoriteStream,
-        builder:
-            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting)
-            return Center(
-              child: CircularProgressIndicator(
-                color: MyColors().purple,
-              ),
-            );
-
-          return SafeArea(
-            child: CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  floating: true,
-                  pinned: true,
-                  snap: true,
-                  expandedHeight: 80,
-                  backgroundColor: Colors.white,
-                  flexibleSpace: FlexibleSpaceBar(
-                    title: Text(
-                      'Favorite',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.roboto(
-                        color: MyColors().purple,
-                        textStyle: TextStyle(),
-                      ),
-                    ),
-                  ),
-                ),
-                SliverPadding(
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        final myData = snapshot.data!.get('favorite')[index];
-
-                        return ProfessorItem(
-                          profile: Profile(
-                            uuid: myData['uuid'],
-                            imgUrl: myData['imgUrl'],
-                            tag: myData['tag'],
-                            firstName: myData['nume'],
-                            secondName: myData['prenume'],
-                            email: myData['email'],
-                            description: myData['descriere'],
-                            city: myData['oras'],
-                            street: myData['strada'],
-                            phoneNumber: myData['numar'],
-                            materie: myData['materie'],
-                            price: myData['pret'],
-                          ),
-                        );
-                      },
-                      childCount: snapshot.data!.get('favorite').length,
-                    ),
-                  ),
-                ),
-              ],
+    return StreamBuilder(
+      stream: _favoriteStream,
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting)
+          return Center(
+            child: CircularProgressIndicator(
+              color: MyColors().purple,
             ),
           );
-        },
-      ),
+
+        return SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                iconTheme: IconThemeData(color: MyColors().purple),
+                floating: true,
+                pinned: true,
+                snap: true,
+                expandedHeight: 80,
+                backgroundColor: Colors.white,
+                actions: [
+                  IconButton(
+                    onPressed: () => MyFirebaseAuth().signOut(context),
+                    icon: Icon(
+                      Icons.logout,
+                    ),
+                  ),
+                ],
+                flexibleSpace: FlexibleSpaceBar(
+                  title: Text(
+                    'Favorite',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.roboto(
+                      color: MyColors().purple,
+                      textStyle: TextStyle(),
+                    ),
+                  ),
+                ),
+              ),
+              SliverPadding(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      final myData = snapshot.data!.get('favorite')[index];
+
+                      return ProfessorItem(
+                        profile: Profile(
+                          uuid: myData['uuid'],
+                          imgUrl: myData['imgUrl'],
+                          tag: myData['tag'],
+                          firstName: myData['nume'],
+                          secondName: myData['prenume'],
+                          email: myData['email'],
+                          description: myData['descriere'],
+                          city: myData['oras'],
+                          street: myData['strada'],
+                          phoneNumber: myData['numar'],
+                          materie: myData['materie'],
+                          price: myData['pret'],
+                        ),
+                      );
+                    },
+                    childCount: snapshot.data!.get('favorite').length,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

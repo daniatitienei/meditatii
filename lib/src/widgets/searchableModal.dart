@@ -1,3 +1,4 @@
+import 'package:diacritic/diacritic.dart';
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,7 +35,8 @@ class _SearchableState extends State<Searchable> {
     else
       results = this
           .data
-          .where((item) => item.toLowerCase().contains(text.toLowerCase()))
+          .where((item) =>
+              item.toLowerCase().contains(removeDiacritics(text.toLowerCase())))
           .toList();
 
     setState(() {

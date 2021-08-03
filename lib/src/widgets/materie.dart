@@ -12,19 +12,19 @@ class Materie extends StatelessWidget {
   final announces;
   final String imageUrl;
 
-  const Materie(
-      {required this.circleColor,
-      required this.backgroundColor,
-      required this.title,
-      required this.announces,
-      required this.imageUrl,
-      Key? key})
-      : super(key: key);
+  const Materie({
+    required this.circleColor,
+    required this.backgroundColor,
+    required this.title,
+    required this.announces,
+    required this.imageUrl,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
+      margin: EdgeInsets.only(bottom: 13),
       child: ListTile(
         onTap: () => Navigator.of(context).pushNamed(
           SelectedCategory.routeName,

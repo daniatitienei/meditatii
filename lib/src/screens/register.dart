@@ -3,6 +3,7 @@ import 'package:find_your_teacher/src/firebase/firebase.dart';
 import 'package:find_your_teacher/src/screens/home.dart';
 import 'package:find_your_teacher/src/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:group_button/group_button.dart';
 
@@ -40,8 +41,21 @@ class RegisterState extends State<Register> {
             _emailController.clear();
             _passwordController.clear();
 
+            showToast(
+              'Contul a fost creat cu succes.',
+              context: context,
+              animation: StyledToastAnimation.slideFromTopFade,
+              position: StyledToastPosition.top,
+              reverseAnimation: StyledToastAnimation.fade,
+              animDuration: Duration(seconds: 1),
+              duration: Duration(seconds: 2),
+              curve: Curves.elasticOut,
+              reverseCurve: Curves.linear,
+            );
+
             if (myFirebase.auth.currentUser != null)
-              Navigator.of(context).pushNamed(Home.routeName);
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil(Home.routeName, (route) => false);
           },
           style: ButtonStyle(
             padding: MaterialStateProperty.all(

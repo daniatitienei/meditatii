@@ -137,7 +137,9 @@ class _InspectProfState extends State<InspectProf> {
                           child: SingleChildScrollView(
                             scrollDirection: Axis.vertical,
                             child: Text(
-                              profile.description,
+                              profile.description.trim() == ''
+                                  ? 'Nicio descriere'
+                                  : profile.description,
                               style: GoogleFonts.roboto(
                                 textStyle: TextStyle(
                                   fontSize: 16,

@@ -25,13 +25,17 @@ dependencies:
     sdk: flutter
   cloud_firestore: ^2.4.0
   cupertino_icons: ^1.0.2
+  diacritic: ^0.1.3
   dropdown_search: ^0.6.3
   firebase_auth: ^3.0.1
   firebase_core: ^1.4.0
   firebase_storage: ^10.0.1
+  flutter_launcher_icons: ^0.9.1
   flutter_shimmer: ^2.1.0
+  flutter_styled_toast: ^2.0.0
   flutter_svg: ^0.22.0
   google_fonts: ^2.1.0
+  google_mobile_ads: ^0.13.2+1
   google_sign_in: ^5.0.5
   group_button: ^3.0.1
   http: ^0.13.3
@@ -39,13 +43,17 @@ dependencies:
   mailto: ^2.0.0
   path_provider: ^2.0.2
   provider: ^5.0.0
-  shimmer: ^2.0.0
   url_launcher: ^6.0.9
   uuid: ^3.0.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "lib/src/assets/icon/teacher.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

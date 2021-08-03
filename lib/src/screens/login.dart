@@ -3,6 +3,7 @@ import 'package:find_your_teacher/src/firebase/firebase.dart';
 import 'package:find_your_teacher/src/screens/home.dart';
 import 'package:find_your_teacher/src/screens/register.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Login extends StatefulWidget {
@@ -31,6 +32,18 @@ class _LoginState extends State<Login> {
             );
 
             if (!_formKey.currentState!.validate()) return;
+
+            showToast(
+              'Conectarea a fost realizată cu succes.',
+              context: context,
+              animation: StyledToastAnimation.slideFromTopFade,
+              position: StyledToastPosition.top,
+              reverseAnimation: StyledToastAnimation.fade,
+              animDuration: Duration(seconds: 1),
+              duration: Duration(seconds: 2),
+              curve: Curves.elasticOut,
+              reverseCurve: Curves.linear,
+            );
 
             if (MyFirebaseAuth().auth.currentUser != null)
               Navigator.of(context)

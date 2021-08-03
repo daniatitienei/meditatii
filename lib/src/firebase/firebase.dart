@@ -6,6 +6,7 @@ import 'package:find_your_teacher/src/screens/home.dart';
 import 'package:find_your_teacher/src/screens/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -107,6 +108,17 @@ class MyFirebaseAuth {
             await signInWithGoogle();
             Navigator.of(context)
                 .pushNamedAndRemoveUntil(Home.routeName, (route) => false);
+            showToast(
+              'V-ați conectat cu succes.',
+              context: context,
+              animation: StyledToastAnimation.slideFromTopFade,
+              position: StyledToastPosition.top,
+              reverseAnimation: StyledToastAnimation.fade,
+              animDuration: Duration(seconds: 1),
+              duration: Duration(seconds: 2),
+              curve: Curves.elasticOut,
+              reverseCurve: Curves.linear,
+            );
           },
           style: ButtonStyle(
             padding: MaterialStateProperty.all(
@@ -169,6 +181,40 @@ class MyFirebaseStorage {
 }
 
 class MyFirestore {
+  void loadAnunturiLength() {
+    final List<String> materii = [
+      'Matematică',
+      'Română',
+      'Informatică',
+      'Biologie',
+      'Fizică',
+      'Engleză',
+      'Chimie',
+      'Desen',
+      'Franceză',
+      'Geografie',
+      'Germană',
+      'Istorie',
+      'Latină',
+      'Muzică',
+      'Psihologie',
+      'Sport',
+    ];
+
+    for (int index = 0; index < materii.length; index++)
+      FirebaseFirestore.instance
+          .collection('materii/${materii[index]}/anunturi')
+          .get()
+          .then((response) {
+        FirebaseFirestore.instance
+            .collection('materii')
+            .doc(materii[index])
+            .update({
+          'anunturi': response.docs.length,
+        });
+      });
+  }
+
   Future<void> addAnnouncement(Profile profile) {
     CollectionReference materii = FirebaseFirestore.instance
         .collection('materii/${profile.materie}/anunturi');
@@ -176,8 +222,8 @@ class MyFirestore {
     return materii
         .add({
           'uuid': profile.uuid,
-          'nume': profile.firstName,
-          'prenume': profile.secondName,
+          'nume': profile.firstName.trim(),
+          'prenume': profile.secondName.trim(),
           'descriere': profile.description,
           'materie': profile.materie,
           'oras': profile.city,
@@ -189,7 +235,7 @@ class MyFirestore {
           'email': profile.email,
           'date': DateTime.now(),
         })
-        .then((value) => print('updated'))
+        .then((value) => MyFirestore().loadAnunturiLength())
         .catchError((err) => print('nu a fost updatat'));
   }
 

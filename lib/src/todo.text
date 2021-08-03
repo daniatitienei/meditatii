@@ -1,6 +1,13 @@
-TODO Sortare
-TODO Bara de cautare la profesori (poate)
+TODO Sortare ( aproape gata )
+TODO Toate orasele ( gata )
+TODO Bara de cautare la profesori ( poate )
 TODO Rating (creez un array si dupa fac suma / array.length + 1)
 TODO Dynamic Links 
 TODO AdMob
-TODO Shimmer effect ( facut )
+TODO Shimmer effect ( gata )
+TODO Pe home scroll ul este bugat ( gata )
+TODO Toast notification (cand faci un anunt, cand iti faci cont, cand te loghezi si cand te deloghezi) ( gata )
+TODO Firebase Storage bug poza isi ia replace ( gata )
+TODO Sa dau trim la nume ( gata )
+TODO Provider installer error ( gata )
+TODO Bug la favorite ( gata )

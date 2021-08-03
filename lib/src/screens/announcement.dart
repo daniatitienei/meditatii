@@ -1,16 +1,21 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
+import 'package:find_your_teacher/src/models/city.dart';
 import 'package:find_your_teacher/src/models/profile.dart';
 import 'package:find_your_teacher/src/widgets/searchableModal.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/svg.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
 
 class Announcement extends StatefulWidget {
   static const String routeName = '/addAnouncement';
@@ -39,8 +44,6 @@ class _AnnouncementState extends State<Announcement> {
 
   final RegExp numberRegExp = RegExp(r'[0-9]');
 
-  final List<String> orase = ['Resita', 'Arad', 'Alba', 'Bucuresti'];
-
   final List<String> materii = [
     'Matematică',
     'Română',
@@ -65,8 +68,6 @@ class _AnnouncementState extends State<Announcement> {
   String materie = '', oras = '', gen = '';
 
   dynamic _pickImageError;
-
-  final String uuid = Uuid().v5(Uuid.NAMESPACE_URL, 'www.google.com');
 
   List<XFile>? _imageFileList;
 
@@ -133,11 +134,18 @@ class _AnnouncementState extends State<Announcement> {
         textAlign: TextAlign.center,
       );
     } else {
-      return SvgPicture.asset(
-        'lib/src/assets/svg/user.svg',
-        color: MyColors().purple,
-        width: MediaQuery.of(context).size.width * 0.35,
-        height: MediaQuery.of(context).size.height * 0.15,
+      return Container(
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.grey.shade300,
+        ),
+        child: SvgPicture.asset(
+          'lib/src/assets/svg/user.svg',
+          color: MyColors().purple,
+          width: MediaQuery.of(context).size.width * 0.15,
+          height: MediaQuery.of(context).size.height * 0.15,
+        ),
       );
     }
   }
@@ -151,6 +159,7 @@ class _AnnouncementState extends State<Announcement> {
 
   phoneValidator(String? value) {
     if (value!.isEmpty) return 'Numărul trebuie completat.';
+    if (value.length < 10) return 'Numărul trebuie să conțină 10 cifre';
   }
 
   priceValidator(String? value) {
@@ -309,8 +318,27 @@ class _AnnouncementState extends State<Announcement> {
         ),
       );
 
-  final String imageUrl =
-      'https://scontent.fclj2-1.fna.fbcdn.net/v/t1.6435-9/89625766_1466749073502837_7540155679034572800_n.jpg?_nc_cat=104&ccb=1-3&_nc_sid=174925&_nc_ohc=U-mIxfB-SZ8AX-R76vv&_nc_ht=scontent.fclj2-1.fna&oh=85b987926553621ea0033864cde8bcdf&oe=61205662';
+  late Future<City> cities;
+
+  Future<City> fetchCities() async {
+    final response = await http.get(
+      Uri.parse(
+        'https://raw.githubusercontent.com/catalin87/baza-de-date-localitati-romania/master/date/localitati.json',
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return City.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to load city');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    cities = fetchCities();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -334,145 +362,188 @@ class _AnnouncementState extends State<Announcement> {
           ),
         ),
       ),
-      body: Form(
-        key: _formKey,
-        child: Container(
-          padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          child: ListView(
-            children: [
-              Column(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () => _onImageButtonPressed(
-                              ImageSource.gallery,
-                              context: context,
+      body: FutureBuilder<City>(
+        future: cities,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final List<String> listaOrase = [];
+            for (int i = 0; i < snapshot.data!.orase.length; i++)
+              listaOrase.add(snapshot.data!.orase[i]['nume']);
+
+            return Form(
+              key: _formKey,
+              child: Container(
+                padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                child: ListView(
+                  children: [
+                    Column(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: () => _onImageButtonPressed(
+                                    ImageSource.gallery,
+                                    context: context,
+                                  ),
+                                  child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.3,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.15,
+                                    child: _previewImages(),
+                                  ),
+                                ),
+                              ],
                             ),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.3,
-                              height: MediaQuery.of(context).size.height * 0.15,
-                              child: _previewImages(),
+                            _buildNameTextFormField(
+                                _firstNameController, 'Nume'),
+                            _buildNameTextFormField(
+                                _lastNameController, 'Prenume'),
+                            _buildStreetTextFormField(_streetController),
+                            _buildDescriptionTextFormField(
+                                _descriptionController),
+                            _buildEmailTextFormField(_emailController),
+                            _buildPhoneNumberTextFormField(_numberController),
+                            Row(
+                              children: [
+                                _buildPriceTextFormField(_priceController),
+                                Text(
+                                  'LEI',
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      _buildNameTextFormField(_firstNameController, 'Nume'),
-                      _buildNameTextFormField(_lastNameController, 'Prenume'),
-                      _buildStreetTextFormField(_streetController),
-                      _buildDescriptionTextFormField(_descriptionController),
-                      _buildEmailTextFormField(_emailController),
-                      _buildPhoneNumberTextFormField(_numberController),
-                      Row(
-                        children: [
-                          _buildPriceTextFormField(_priceController),
-                          Text(
-                            'LEI',
-                            style: GoogleFonts.roboto(
-                              fontSize: 18,
+                            Searchable(
+                              data: genuri,
+                              defaultValue: "Selectați genul",
+                              callBack: (String newVal) {
+                                setState(() {
+                                  gen = newVal;
+                                });
+                              },
                             ),
-                          ),
-                        ],
-                      ),
-                      Searchable(
-                        data: materii,
-                        defaultValue: "Selectați materia",
-                        callBack: (String newVal) {
-                          setState(() {
-                            materie = newVal;
-                          });
-                        },
-                      ),
-                      Searchable(
-                        data: orase,
-                        defaultValue: "Selectați orașul",
-                        callBack: (String newVal) {
-                          setState(() {
-                            oras = newVal;
-                          });
-                        },
-                      ),
-                      Searchable(
-                        data: genuri,
-                        defaultValue: "Selectați genul",
-                        callBack: (String newVal) {
-                          setState(() {
-                            gen = newVal;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 25),
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (oras == '' || materie == '' || gen == '') return;
+                            Searchable(
+                              data: listaOrase,
+                              defaultValue: "Selectați orașul",
+                              callBack: (String newVal) {
+                                setState(() {
+                                  oras = newVal;
+                                });
+                              },
+                            ),
+                            Searchable(
+                              data: materii,
+                              defaultValue: "Selectați materia",
+                              callBack: (String newVal) {
+                                setState(() {
+                                  materie = newVal;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 25),
+                          width: MediaQuery.of(context).size.width,
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              if (oras == '' || materie == '' || gen == '')
+                                return;
 
-                        if (!_formKey.currentState!.validate()) return;
+                              if (!_formKey.currentState!.validate()) return;
 
-                        await MyFirebaseStorage()
-                            .uploadFile(_imageFileList![0].path, uuid);
+                              String uuid = Uuid().v1();
 
-                        var imgUrl =
-                            await MyFirebaseStorage().getImageUrl(uuid);
+                              await MyFirebaseStorage().uploadFile(
+                                _imageFileList![0].path,
+                                uuid,
+                              );
 
-                        await MyFirestore().addAnnouncement(
-                          Profile(
-                            uuid: this.uuid,
-                            email: this._emailController.text,
-                            materie: this.materie,
-                            firstName: this._firstNameController.text,
-                            secondName: this._lastNameController.text,
-                            description: this._descriptionController.text,
-                            phoneNumber: this._numberController.text,
-                            street: this._streetController.text,
-                            city: this.oras,
-                            price: int.parse(this._priceController.text),
-                            imgUrl: imgUrl,
-                            tag:
-                                '${this._firstNameController.text} ${this._lastNameController.text}',
-                          ),
-                        );
-                        Navigator.of(context).pop();
-                      },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all(
-                          EdgeInsets.only(
-                            top: 14,
-                            bottom: 14,
+                              var imgUrl =
+                                  await MyFirebaseStorage().getImageUrl(uuid);
+
+                              await MyFirestore().addAnnouncement(
+                                Profile(
+                                  uuid: uuid,
+                                  email: this._emailController.text,
+                                  materie: this.materie,
+                                  firstName: this._firstNameController.text,
+                                  secondName: this._lastNameController.text,
+                                  description: this._descriptionController.text,
+                                  phoneNumber: this._numberController.text,
+                                  street: this._streetController.text,
+                                  city: this.oras,
+                                  price: int.parse(this._priceController.text),
+                                  imgUrl: imgUrl,
+                                  tag:
+                                      '${this._firstNameController.text.toLowerCase()}${this._lastNameController.text.toLowerCase()}${uuid}',
+                                ),
+                              );
+
+                              showToast(
+                                'Anunțul a fost adăugat.',
+                                context: context,
+                                animation:
+                                    StyledToastAnimation.slideFromTopFade,
+                                position: StyledToastPosition.top,
+                                reverseAnimation: StyledToastAnimation.fade,
+                                animDuration: Duration(seconds: 1),
+                                duration: Duration(seconds: 2),
+                                curve: Curves.elasticOut,
+                                reverseCurve: Curves.linear,
+                              );
+
+                              Navigator.of(context).pop();
+                            },
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all(
+                                EdgeInsets.only(
+                                  top: 14,
+                                  bottom: 14,
+                                ),
+                              ),
+                              backgroundColor: MaterialStateProperty.all(
+                                (oras == '' ||
+                                        materie == '' ||
+                                        gen == '' ||
+                                        _imageFileList?.length == null)
+                                    ? MyColors().purpleSixtyPercent
+                                    : MyColors().purple,
+                              ),
+                            ),
+                            child: Text(
+                              'Adăugați anunțul',
+                              style: GoogleFonts.roboto(
+                                textStyle: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                        backgroundColor: MaterialStateProperty.all(
-                          (oras == '' ||
-                                  materie == '' ||
-                                  gen == '' ||
-                                  _imageFileList?.length == null)
-                              ? MyColors().purpleSixtyPercent
-                              : MyColors().purple,
-                        ),
-                      ),
-                      child: Text(
-                        'Adăugați anunțul',
-                        style: GoogleFonts.roboto(
-                          textStyle: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
+            );
+          } else if (snapshot.hasError) {
+            return Text('${snapshot.error}');
+          }
+
+          return Center(
+            child: CircularProgressIndicator(
+              color: MyColors().purple,
+            ),
+          );
+        },
       ),
     );
   }
