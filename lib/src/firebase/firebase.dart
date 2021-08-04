@@ -25,21 +25,46 @@ class MyFirebaseAuth {
   String? _loginErrorEmail = null;
   String? _loginErrorPassword = null;
 
+  bool _isStudent = true;
+
   bool isSignedIn() => auth.currentUser == null ? false : true;
 
-  String? validateRegisterEmail() => this._registerErrorEmail;
+  String? validateRegisterEmail(String? email) =>
+      email!.isEmpty && this._registerErrorEmail == null
+          ? 'Adresă invalidă.'
+          : this._registerErrorEmail;
 
-  String? validateRegisterPassword() => this._registerErrorPassword;
+  String? validateRegisterPassword(String? password) =>
+      password!.isEmpty && this._registerErrorPassword == null
+          ? 'Parolă invalidă.'
+          : this._registerErrorPassword;
 
-  String? validateLoginEmail() => this._loginErrorEmail;
+  String? validateLoginEmail(String? email) =>
+      email!.isEmpty && this._loginErrorEmail == null
+          ? 'Adresă invalidă.'
+          : this._loginErrorEmail;
 
-  String? validateLoginPassword() => this._loginErrorPassword;
+  String? validateLoginPassword(String? password) =>
+      password!.isEmpty && this._loginErrorPassword == null
+          ? 'Parolă invalidă.'
+          : this._loginErrorPassword;
+
+  bool isStudent() => this._isStudent;
 
   // Adauga user-ul in baza colectia "users"
 
   Future<void> addUser(email, bool isStudent) => users.doc(email).set({
         'isStudent': isStudent,
+        'favorite': [],
       });
+
+  setIsStudent(email) async {
+    await users.doc(email).get().then((response) {
+      Map<String, dynamic> data = response.data() as Map<String, dynamic>;
+
+      this._isStudent = data['isStudent'];
+    });
+  }
 
   // Inregistrare cu email si parola
 

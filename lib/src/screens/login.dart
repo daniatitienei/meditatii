@@ -20,6 +20,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
+  MyFirebaseAuth auth = MyFirebaseAuth();
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -31,14 +32,14 @@ class _LoginState extends State<Login> {
         width: MediaQuery.of(context).size.width,
         child: ElevatedButton(
           onPressed: () async {
-            await MyFirebaseAuth().loginWithEmailAndPassword(
+            await auth.loginWithEmailAndPassword(
               _emailController.text,
               _passwordController.text,
             );
 
             if (!_formKey.currentState!.validate()) return;
 
-            // this._interstitialAd!.show();
+            this._interstitialAd!.show();
 
             showToast(
               'Conectarea a fost realizată cu succes.',
@@ -52,7 +53,7 @@ class _LoginState extends State<Login> {
               reverseCurve: Curves.linear,
             );
 
-            if (MyFirebaseAuth().auth.currentUser != null)
+            if (auth.auth.currentUser != null)
               Navigator.of(context)
                   .pushNamedAndRemoveUntil(Home.routeName, (route) => false);
           },
@@ -116,7 +117,7 @@ class _LoginState extends State<Login> {
                 TextFormField(
                   controller: _emailController,
                   cursorColor: MyColors().purpleSixtyPercent,
-                  validator: (email) => MyFirebaseAuth().validateLoginEmail(),
+                  validator: (email) => auth.validateLoginEmail(email),
                   style: GoogleFonts.roboto(
                     textStyle: TextStyle(
                       color: MyColors().purple,
@@ -143,7 +144,7 @@ class _LoginState extends State<Login> {
                     TextFormField(
                       controller: _passwordController,
                       validator: (password) =>
-                          MyFirebaseAuth().validateLoginPassword(),
+                          auth.validateLoginPassword(password),
                       cursorColor: MyColors().purpleSixtyPercent,
                       obscureText: true,
                       style: GoogleFonts.roboto(
@@ -233,7 +234,7 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
-                MyFirebaseAuth().googleButton(context),
+                auth.googleButton(context),
               ],
             ),
           ),

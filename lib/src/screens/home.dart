@@ -25,6 +25,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  MyFirebaseAuth auth = MyFirebaseAuth();
+
+  bool isStudent = true;
+
   InterstitialAd? _interstitialAd;
   final BannerAd myBanner = BannerAd(
     adUnitId: AdMob().bannerAdId,
@@ -65,14 +69,23 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+
+    Future.delayed(
+      Duration.zero,
+      () async {
+        await auth.setIsStudent(auth.auth.currentUser!.email);
+
+        setState(() {
+          this.isStudent = auth.isStudent();
+        });
+      },
+    );
     myBanner.load();
     InterstitialAd.load(
       adUnitId: AdMob().interstitialAdId,
       request: AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (InterstitialAd ad) {
-          this._interstitialAd = ad;
-        },
+        onAdLoaded: (InterstitialAd ad) => this._interstitialAd = ad,
         onAdFailedToLoad: (LoadAdError error) {
           print('InterstitialAd failed to load: $error');
         },
@@ -86,9 +99,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: Colors.white,
       extendBody: true,
-      floatingActionButton: AddAnouncement(
-        interstitialAd: this._interstitialAd,
-      ),
+      floatingActionButton: this.isStudent ? null : AddAnouncement(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: _BottomBar(),
       body: StreamBuilder<QuerySnapshot>(

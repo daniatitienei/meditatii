@@ -123,7 +123,7 @@ class RegisterState extends State<Register> {
                 TextFormField(
                   cursorColor: MyColors().purpleSixtyPercent,
                   controller: _emailController,
-                  validator: (email) => myFirebase.validateRegisterEmail(),
+                  validator: (email) => myFirebase.validateRegisterEmail(email),
                   style: GoogleFonts.roboto(
                     textStyle: TextStyle(
                       color: MyColors().purple,
@@ -151,7 +151,7 @@ class RegisterState extends State<Register> {
                       obscureText: true,
                       controller: _passwordController,
                       validator: (password) =>
-                          myFirebase.validateRegisterPassword(),
+                          myFirebase.validateRegisterPassword(password),
                       cursorColor: MyColors().purpleSixtyPercent,
                       style: GoogleFonts.roboto(
                         textStyle: TextStyle(

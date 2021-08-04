@@ -20,7 +20,7 @@ import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
 class Announcement extends StatefulWidget {
-  static const String routeName = '/addAnouncement';
+  static const String routeName = '/addAnnouncement';
 
   const Announcement({Key? key}) : super(key: key);
 
@@ -322,6 +322,7 @@ class _AnnouncementState extends State<Announcement> {
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
             this._interstitialAd = ad;
+            ad.show();
           },
           onAdFailedToLoad: (LoadAdError error) {
             print('InterstitialAd failed to load: $error');
@@ -471,9 +472,11 @@ class _AnnouncementState extends State<Announcement> {
                                   price: int.parse(this._priceController.text),
                                   imgUrl: imgUrl,
                                   tag:
-                                      '${this._firstNameController.text.toLowerCase()}${this._lastNameController.text.toLowerCase()}${uuid}',
+                                      '${this._firstNameController.text.toLowerCase()}${this._lastNameController.text.toLowerCase()}$uuid',
                                 ),
                               );
+
+                              this._interstitialAd?.show();
 
                               showToast(
                                 'Anunțul a fost adăugat.',
@@ -487,8 +490,6 @@ class _AnnouncementState extends State<Announcement> {
                                 curve: Curves.elasticOut,
                                 reverseCurve: Curves.linear,
                               );
-
-                              this._interstitialAd?.show();
 
                               Navigator.of(context).pop();
                             },

@@ -24,6 +24,10 @@ class SelectedCategory extends StatefulWidget {
 }
 
 class _SelectedCategoryState extends State<SelectedCategory> {
+  MyFirebaseAuth auth = MyFirebaseAuth();
+
+  bool isStudent = true;
+
   InterstitialAd? _interstitialAd;
   final BannerAd myBanner = BannerAd(
     adUnitId: AdMob().bannerAdId,
@@ -32,27 +36,19 @@ class _SelectedCategoryState extends State<SelectedCategory> {
     listener: BannerAdListener(),
   );
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   myBanner.load();
-  //   InterstitialAd.load(
-  //     adUnitId: AdMob().interstitialAdId,
-  //     request: AdRequest(),
-  //     adLoadCallback: InterstitialAdLoadCallback(
-  //       onAdLoaded: (InterstitialAd ad) {
-  //         this._interstitialAd = ad;
-  //       },
-  //       onAdFailedToLoad: (LoadAdError error) {
-  //         print('InterstitialAd failed to load: $error');
-  //       },
-  //     ),
-  //   );
-  // }
-
   @override
   void initState() {
     super.initState();
+    Future.delayed(
+      Duration.zero,
+      () async {
+        await auth.setIsStudent(auth.auth.currentUser!.email);
+
+        setState(() {
+          this.isStudent = auth.isStudent();
+        });
+      },
+    );
     myBanner.load();
     InterstitialAd.load(
       adUnitId: AdMob().interstitialAdId,
@@ -87,11 +83,8 @@ class _SelectedCategoryState extends State<SelectedCategory> {
 
     return Scaffold(
       extendBody: true,
-      floatingActionButton: AddAnouncement(
-        interstitialAd: this._interstitialAd,
-      ),
+      floatingActionButton: this.isStudent ? null : AddAnouncement(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // bottomNavigationBar: BottomBar(),
       body: StreamBuilder<QuerySnapshot>(
         stream: _anunturiStream,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -191,31 +184,6 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                   ),
                 ),
               ],
-
-              // child: ListView(
-              //   children: snapshot.snapshot.data!.docs[index]!.docs
-              //       .map((DocumentSnapshot documentSnapshot) {
-              //     Map<String, dynamic> snapshot.data!.docs[index] =
-              //         documentSnapshot.snapshot.data!.docs[index]() as Map<String, dynamic>;
-
-              //     return ProfessorItem(
-              //       profile: Profile(
-              //         uuid: snapshot.data!.docs[index]['uuid'],
-              //         imgUrl: snapshot.data!.docs[index]['imgUrl'],
-              //         tag: snapshot.data!.docs[index]['tag'],
-              //         firstName: snapshot.data!.docs[index]['nume'],
-              //         secondName: snapshot.data!.docs[index]['prenume'],
-              //         email: snapshot.data!.docs[index]['email'],
-              //         description: snapshot.data!.docs[index]['descriere'],
-              //         city: snapshot.data!.docs[index]['oras'],
-              //         street: snapshot.data!.docs[index]['strada'],
-              //         phoneNumber: snapshot.data!.docs[index]['numar'],
-              //         materie: snapshot.data!.docs[index]['materie'],
-              //         price: snapshot.data!.docs[index]['pret'],
-              //       ),
-              //     );
-              //   }).toList(),
-              // ),
             ),
           );
         },
