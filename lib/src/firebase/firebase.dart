@@ -66,7 +66,7 @@ class MyFirebaseAuth {
   Future<void> loginWithEmailAndPassword(String email, String password) async {
     // FIXME Sa-si schimbe valoarea
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
+      await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found')
@@ -227,7 +227,6 @@ class MyFirestore {
           'descriere': profile.description,
           'materie': profile.materie,
           'oras': profile.city,
-          'strada': profile.street,
           'numar': profile.phoneNumber,
           'pret': profile.price,
           'imgUrl': profile.imgUrl,
@@ -280,7 +279,6 @@ class MyFirestore {
                 'descriere': profile.description,
                 'materie': profile.materie,
                 'oras': profile.city,
-                'strada': profile.street,
                 'numar': profile.phoneNumber,
                 'pret': profile.price,
                 'imgUrl': profile.imgUrl,
@@ -309,7 +307,6 @@ class MyFirestore {
                 'descriere': profile.description,
                 'materie': profile.materie,
                 'oras': profile.city,
-                'strada': profile.street,
                 'numar': profile.phoneNumber,
                 'pret': profile.price,
                 'imgUrl': profile.imgUrl,

@@ -10,7 +10,7 @@ class TypeOfFilters with ChangeNotifier {
 
   // crescator => 'pret', descending: false
   // descrescator => 'pret', descending: true
-  // noi => 'date', descending: false
+  // noi => 'date', descending: true
 
   set setDefaultNumber(int newValue) {
     defaultNumber = newValue;

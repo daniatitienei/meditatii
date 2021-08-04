@@ -34,7 +34,6 @@ typedef void OnPickImageCallback(
 class _AnnouncementState extends State<Announcement> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _streetController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _numberController = TextEditingController();
   final TextEditingController _emailController = TextEditingController(
@@ -192,30 +191,6 @@ class _AnnouncementState extends State<Announcement> {
         ),
       );
 
-  Widget _buildStreetTextFormField(TextEditingController controller) =>
-      TextFormField(
-        controller: controller,
-        cursorColor: MyColors().purple,
-        validator: (address) {
-          if (address!.isEmpty) return 'Adresa trebuie completată';
-        },
-        style: GoogleFonts.roboto(
-          textStyle: TextStyle(color: MyColors().purple),
-        ),
-        decoration: InputDecoration(
-          hintText: 'Adresă',
-          hintStyle: GoogleFonts.roboto(
-            color: MyColors().purpleSixtyPercent,
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: MyColors().purple),
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: MyColors().purpleSixtyPercent),
-          ),
-        ),
-      );
-
   Widget _buildDescriptionTextFormField(TextEditingController controller) =>
       ConstrainedBox(
         constraints:
@@ -357,6 +332,7 @@ class _AnnouncementState extends State<Announcement> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
@@ -394,6 +370,7 @@ class _AnnouncementState extends State<Announcement> {
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -417,7 +394,6 @@ class _AnnouncementState extends State<Announcement> {
                                 _firstNameController, 'Nume'),
                             _buildNameTextFormField(
                                 _lastNameController, 'Prenume'),
-                            _buildStreetTextFormField(_streetController),
                             _buildDescriptionTextFormField(
                                 _descriptionController),
                             _buildEmailTextFormField(_emailController),
@@ -491,7 +467,6 @@ class _AnnouncementState extends State<Announcement> {
                                   secondName: this._lastNameController.text,
                                   description: this._descriptionController.text,
                                   phoneNumber: this._numberController.text,
-                                  street: this._streetController.text,
                                   city: this.oras,
                                   price: int.parse(this._priceController.text),
                                   imgUrl: imgUrl,
@@ -513,7 +488,7 @@ class _AnnouncementState extends State<Announcement> {
                                 reverseCurve: Curves.linear,
                               );
 
-                              this._interstitialAd!.show();
+                              this._interstitialAd?.show();
 
                               Navigator.of(context).pop();
                             },

@@ -5,6 +5,7 @@ import 'package:find_your_teacher/src/models/typeOfFilters.dart';
 import 'package:find_your_teacher/src/screens/Announcement.dart';
 import 'package:find_your_teacher/src/screens/favorites.dart';
 import 'package:find_your_teacher/src/screens/filters.dart';
+import 'package:find_your_teacher/src/screens/forgotPassword.dart';
 import 'package:find_your_teacher/src/screens/home.dart';
 import 'package:find_your_teacher/src/screens/inspectProfessor.dart';
 import 'package:find_your_teacher/src/screens/login.dart';
@@ -69,6 +70,7 @@ class _MyAppState extends State<MyApp> {
         InspectProfessor.routeName: (context) => InspectProfessor(),
         Announcement.routeName: (context) => Announcement(),
         Filters.routeName: (context) => Filters(),
+        ForgotPassword.routeName: (context) => ForgotPassword(),
       },
       home: FutureBuilder(
         future: _initialization,

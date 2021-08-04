@@ -34,7 +34,7 @@ class ProfessorItem extends StatelessWidget {
           style: TextStyle(fontSize: 18),
         ),
         subtitle: Text(
-          profile.street,
+          profile.city,
           overflow: TextOverflow.ellipsis,
           style: GoogleFonts.roboto(color: MyColors().purpleSixtyPercent),
         ),

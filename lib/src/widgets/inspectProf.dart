@@ -272,6 +272,7 @@ class _InspectProfState extends State<InspectProf> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: MyColors().purple,
         elevation: 0,

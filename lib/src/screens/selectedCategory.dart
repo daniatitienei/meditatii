@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_your_teacher/src/admob/admob.dart';
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
+import 'package:find_your_teacher/src/firebase/firebase.dart';
 import 'package:find_your_teacher/src/models/categoryTitle.dart';
 import 'package:find_your_teacher/src/models/profile.dart';
 import 'package:find_your_teacher/src/models/typeOfFilters.dart';
@@ -10,12 +12,61 @@ import 'package:flutter/material.dart';
 import 'package:flutter_shimmer/flutter_shimmer.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
-class SelectedCategory extends StatelessWidget {
+class SelectedCategory extends StatefulWidget {
   static const String routeName = '/selectedCategory';
-
   const SelectedCategory({Key? key}) : super(key: key);
+
+  @override
+  _SelectedCategoryState createState() => _SelectedCategoryState();
+}
+
+class _SelectedCategoryState extends State<SelectedCategory> {
+  InterstitialAd? _interstitialAd;
+  final BannerAd myBanner = BannerAd(
+    adUnitId: AdMob().bannerAdId,
+    size: AdSize.banner,
+    request: AdRequest(),
+    listener: BannerAdListener(),
+  );
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   myBanner.load();
+  //   InterstitialAd.load(
+  //     adUnitId: AdMob().interstitialAdId,
+  //     request: AdRequest(),
+  //     adLoadCallback: InterstitialAdLoadCallback(
+  //       onAdLoaded: (InterstitialAd ad) {
+  //         this._interstitialAd = ad;
+  //       },
+  //       onAdFailedToLoad: (LoadAdError error) {
+  //         print('InterstitialAd failed to load: $error');
+  //       },
+  //     ),
+  //   );
+  // }
+
+  @override
+  void initState() {
+    super.initState();
+    myBanner.load();
+    InterstitialAd.load(
+      adUnitId: AdMob().interstitialAdId,
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          this._interstitialAd = ad;
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          print('InterstitialAd failed to load: $error');
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,42 +74,22 @@ class SelectedCategory extends StatelessWidget {
 
     final Stream<QuerySnapshot> _anunturiStream = FirebaseFirestore.instance
         .collection('materii/${args.title}/anunturi')
-        // .where('oras', isEqualTo: 'Resita')
+        .where('oras',
+            isEqualTo: Provider.of<TypeOfFilters>(context).locatie == 'Oriunde'
+                ? null
+                : Provider.of<TypeOfFilters>(context).locatie)
         .orderBy(
           Provider.of<TypeOfFilters>(context).getVariableName(),
           descending: Provider.of<TypeOfFilters>(context).getBoolForValue(),
         )
+        // .orderBy('pret')
         .snapshots();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          args.title,
-          style: GoogleFonts.roboto(
-            color: MyColors().purple,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () => Navigator.of(context).pushNamed(Filters.routeName),
-            icon: Icon(
-              Icons.filter_list,
-            ),
-            color: MyColors().purple,
-          ),
-        ],
-        leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
-          icon: Icon(
-            Icons.arrow_back_ios_new_rounded,
-          ),
-          color: MyColors().purple,
-        ),
-      ),
       extendBody: true,
-      floatingActionButton: AddAnnouncement(),
+      floatingActionButton: AddAnouncement(
+        interstitialAd: this._interstitialAd,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       // bottomNavigationBar: BottomBar(),
       body: StreamBuilder<QuerySnapshot>(
@@ -90,32 +121,101 @@ class SelectedCategory extends StatelessWidget {
             );
 
           return SafeArea(
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              child: ListView(
-                children: snapshot.data!.docs
-                    .map((DocumentSnapshot documentSnapshot) {
-                  Map<String, dynamic> data =
-                      documentSnapshot.data() as Map<String, dynamic>;
-
-                  return ProfessorItem(
-                    profile: Profile(
-                      uuid: data['uuid'],
-                      imgUrl: data['imgUrl'],
-                      tag: data['tag'],
-                      firstName: data['nume'],
-                      secondName: data['prenume'],
-                      email: data['email'],
-                      description: data['descriere'],
-                      city: data['oras'],
-                      street: data['strada'],
-                      phoneNumber: data['numar'],
-                      materie: data['materie'],
-                      price: data['pret'],
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  iconTheme: IconThemeData(color: MyColors().purple),
+                  floating: true,
+                  pinned: true,
+                  snap: true,
+                  expandedHeight: 80,
+                  backgroundColor: Colors.white,
+                  actions: [
+                    IconButton(
+                      onPressed: () =>
+                          Navigator.of(context).pushNamed(Filters.routeName),
+                      icon: Icon(
+                        Icons.filter_list,
+                      ),
+                      color: MyColors().purple,
                     ),
-                  );
-                }).toList(),
-              ),
+                  ],
+                  leading: IconButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                    ),
+                    color: MyColors().purple,
+                  ),
+                  flexibleSpace: FlexibleSpaceBar(
+                    title: Text(
+                      args.title,
+                      style: GoogleFonts.roboto(
+                        color: MyColors().purple,
+                      ),
+                    ),
+                  ),
+                ),
+                SliverToBoxAdapter(
+                  child: Container(
+                    height: 50,
+                    child: AdWidget(
+                      ad: myBanner,
+                    ),
+                  ),
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        return ProfessorItem(
+                          profile: Profile(
+                            uuid: snapshot.data!.docs[index]['uuid'],
+                            imgUrl: snapshot.data!.docs[index]['imgUrl'],
+                            tag: snapshot.data!.docs[index]['tag'],
+                            firstName: snapshot.data!.docs[index]['nume'],
+                            secondName: snapshot.data!.docs[index]['prenume'],
+                            email: snapshot.data!.docs[index]['email'],
+                            description: snapshot.data!.docs[index]
+                                ['descriere'],
+                            city: snapshot.data!.docs[index]['oras'],
+                            phoneNumber: snapshot.data!.docs[index]['numar'],
+                            materie: snapshot.data!.docs[index]['materie'],
+                            price: snapshot.data!.docs[index]['pret'],
+                          ),
+                        );
+                      },
+                      childCount: snapshot.data?.docs.length,
+                    ),
+                  ),
+                ),
+              ],
+
+              // child: ListView(
+              //   children: snapshot.snapshot.data!.docs[index]!.docs
+              //       .map((DocumentSnapshot documentSnapshot) {
+              //     Map<String, dynamic> snapshot.data!.docs[index] =
+              //         documentSnapshot.snapshot.data!.docs[index]() as Map<String, dynamic>;
+
+              //     return ProfessorItem(
+              //       profile: Profile(
+              //         uuid: snapshot.data!.docs[index]['uuid'],
+              //         imgUrl: snapshot.data!.docs[index]['imgUrl'],
+              //         tag: snapshot.data!.docs[index]['tag'],
+              //         firstName: snapshot.data!.docs[index]['nume'],
+              //         secondName: snapshot.data!.docs[index]['prenume'],
+              //         email: snapshot.data!.docs[index]['email'],
+              //         description: snapshot.data!.docs[index]['descriere'],
+              //         city: snapshot.data!.docs[index]['oras'],
+              //         street: snapshot.data!.docs[index]['strada'],
+              //         phoneNumber: snapshot.data!.docs[index]['numar'],
+              //         materie: snapshot.data!.docs[index]['materie'],
+              //         price: snapshot.data!.docs[index]['pret'],
+              //       ),
+              //     );
+              //   }).toList(),
+              // ),
             ),
           );
         },

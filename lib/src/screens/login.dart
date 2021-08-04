@@ -1,6 +1,7 @@
 import 'package:find_your_teacher/src/admob/admob.dart';
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
+import 'package:find_your_teacher/src/screens/forgotPassword.dart';
 import 'package:find_your_teacher/src/screens/home.dart';
 import 'package:find_your_teacher/src/screens/register.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class _LoginState extends State<Login> {
 
             if (!_formKey.currentState!.validate()) return;
 
-            this._interstitialAd!.show();
+            // this._interstitialAd!.show();
 
             showToast(
               'Conectarea a fost realizată cu succes.',
@@ -94,7 +95,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: Colors.white,
       body: Form(
         key: _formKey,
         child: SafeArea(
@@ -167,9 +168,8 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
-                        // Navigator.of(context).pushNamed(Register.routeName);
-                      },
+                      onTap: () => Navigator.of(context)
+                          .pushNamed(ForgotPassword.routeName),
                       child: Container(
                         margin: EdgeInsets.only(top: 8),
                         child: Text(

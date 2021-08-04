@@ -6,7 +6,6 @@ class Profile {
   final String secondName;
   final String email;
   final String city;
-  final String street;
   final String description;
   final String phoneNumber;
   final String materie;
@@ -21,7 +20,6 @@ class Profile {
     required this.email,
     required this.description,
     required this.city,
-    required this.street,
     required this.phoneNumber,
     required this.materie,
     required this.price,

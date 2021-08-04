@@ -9,6 +9,7 @@ import 'package:find_your_teacher/src/widgets/addAnnouncement.dart';
 import 'package:find_your_teacher/src/widgets/materie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_shimmer/flutter_shimmer.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -60,34 +61,22 @@ class _HomeState extends State<Home> {
           ],
         ),
       );
-  int _page = 0;
 
   @override
   void initState() {
     super.initState();
     myBanner.load();
     InterstitialAd.load(
-        adUnitId: AdMob().interstitialAdId,
-        request: AdRequest(),
-        adLoadCallback: InterstitialAdLoadCallback(
-          onAdLoaded: (InterstitialAd ad) {
-            this._interstitialAd = ad;
-          },
-          onAdFailedToLoad: (LoadAdError error) {
-            print('InterstitialAd failed to load: $error');
-          },
-        ));
-  }
-
-  @override
-  void reassemble() {
-    super.reassemble();
-    _onPageChanged(_page);
-  }
-
-  void _onPageChanged(int page) {
-    setState(
-      () => _page = page,
+      adUnitId: AdMob().interstitialAdId,
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          this._interstitialAd = ad;
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          print('InterstitialAd failed to load: $error');
+        },
+      ),
     );
   }
 
@@ -95,39 +84,11 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     MyFirestore().loadAnunturiLength();
     return Scaffold(
+      backgroundColor: Colors.white,
       extendBody: true,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          'Categorii',
-          style: GoogleFonts.roboto(color: MyColors().purple),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {
-              MyFirebaseAuth().signOut(context);
-              this._interstitialAd!.show();
-              showToast(
-                'V-ați deconectat cu succes.',
-                context: context,
-                animation: StyledToastAnimation.slideFromTopFade,
-                position: StyledToastPosition.top,
-                reverseAnimation: StyledToastAnimation.fade,
-                animDuration: Duration(seconds: 1),
-                duration: Duration(seconds: 2),
-                curve: Curves.elasticOut,
-                reverseCurve: Curves.linear,
-              );
-            },
-            icon: Icon(
-              Icons.logout,
-              color: MyColors().purple,
-            ),
-          ),
-        ],
+      floatingActionButton: AddAnouncement(
+        interstitialAd: this._interstitialAd,
       ),
-      floatingActionButton: AddAnnouncement(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: _BottomBar(),
       body: StreamBuilder<QuerySnapshot>(
@@ -158,32 +119,107 @@ class _HomeState extends State<Home> {
             );
 
           return PageView(
-            onPageChanged: _onPageChanged,
             controller: _pageController,
             children: [
               SafeArea(
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        itemBuilder: (context, index) => Materie(
-                          circleColor: MyColors().circleColors[index],
-                          backgroundColor: MyColors().backgroundColors[index],
-                          title: snapshot.data!.docs[index].id,
-                          announces: snapshot.data?.docs[index]['anunturi'],
-                          imageUrl: snapshot.data!.docs[index]['imageUrl'],
+                child: CustomScrollView(
+                  slivers: [
+                    SliverAppBar(
+                      backgroundColor: Colors.white,
+                      // centerTitle: true,
+                      flexibleSpace: FlexibleSpaceBar(
+                        title: Text(
+                          'Materii',
+                          style: GoogleFonts.roboto(
+                            color: MyColors().purple,
+                          ),
                         ),
-                        itemCount: snapshot.data?.docs.length,
+                      ),
+                      actions: [
+                        IconButton(
+                          onPressed: () {
+                            MyFirebaseAuth().signOut(context);
+                            this._interstitialAd?.show();
+                            showToast(
+                              'V-ați deconectat cu succes.',
+                              context: context,
+                              animation: StyledToastAnimation.slideFromTopFade,
+                              position: StyledToastPosition.top,
+                              reverseAnimation: StyledToastAnimation.fade,
+                              animDuration: Duration(seconds: 1),
+                              duration: Duration(seconds: 2),
+                              curve: Curves.elasticOut,
+                              reverseCurve: Curves.linear,
+                            );
+                          },
+                          icon: Icon(
+                            Icons.logout,
+                            color: MyColors().purple,
+                          ),
+                        ),
+                      ],
+                      expandedHeight: 70,
+                      floating: true,
+                      snap: true,
+                      pinned: false,
+                    ),
+                    SliverToBoxAdapter(
+                      child: Container(
+                        height: 50,
+                        child: AdWidget(
+                          ad: myBanner,
+                        ),
                       ),
                     ),
-                    Container(
-                      height: 50,
-                      child: AdWidget(
-                        ad: myBanner,
+                    SliverPadding(
+                      padding: EdgeInsets.only(top: 10),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) => Materie(
+                            circleColor: MyColors().circleColors[index],
+                            backgroundColor: MyColors().backgroundColors[index],
+                            title: snapshot.data!.docs[index].id,
+                            announces: snapshot.data?.docs[index]['anunturi'],
+                            imageUrl: snapshot.data!.docs[index]['imageUrl'],
+                          ),
+                          childCount: snapshot.data!.docs.length,
+                        ),
                       ),
                     ),
+
+                    // Container(
+                    //   height: 50,
+                    // )
+                    // Container(
+                    //   height: 50,
+                    //   child: AdWidget(
+                    //     ad: myBanner,
+                    //   ),
+                    // ),
                   ],
                 ),
+                // child: Column(
+                //   children: [
+                //     Expanded(
+                //       child: ListView.builder(
+                //         itemBuilder: (context, index) => Materie(
+                //           circleColor: MyColors().circleColors[index],
+                //           backgroundColor: MyColors().backgroundColors[index],
+                //           title: snapshot.data!.docs[index].id,
+                //           announces: snapshot.data?.docs[index]['anunturi'],
+                //           imageUrl: snapshot.data!.docs[index]['imageUrl'],
+                //         ),
+                //         itemCount: snapshot.data?.docs.length,
+                //       ),
+                //     ),
+                //     Container(
+                //       height: 50,
+                //       child: AdWidget(
+                //         ad: myBanner,
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ),
               Favorites(),
             ],

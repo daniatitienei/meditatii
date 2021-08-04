@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
+import 'package:find_your_teacher/src/firebase/firebase.dart';
 import 'package:find_your_teacher/src/models/city.dart';
 import 'package:find_your_teacher/src/models/typeOfFilters.dart';
 import 'package:find_your_teacher/src/widgets/searchableModal.dart';
@@ -19,8 +20,6 @@ class Filters extends StatefulWidget {
 }
 
 class _FiltersState extends State<Filters> {
-  String? oras;
-
   List<String> ordonareArr = [
     'Crescător',
     'Descrescător',
@@ -162,10 +161,15 @@ class _FiltersState extends State<Filters> {
                               ),
                               Searchable(
                                 data: listaOrase,
-                                defaultValue: 'Alegeți locația',
+                                defaultValue: Provider.of<TypeOfFilters>(
+                                        context,
+                                        listen: false)
+                                    .locatie,
                                 callBack: (String newVal) {
                                   setState(() {
-                                    oras = newVal;
+                                    Provider.of<TypeOfFilters>(context,
+                                            listen: false)
+                                        .setLocatie = newVal;
                                   });
                                 },
                               ),
