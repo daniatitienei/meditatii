@@ -107,9 +107,9 @@ class RegisterState extends State<Register> {
         key: _formKey,
         child: SafeArea(
           child: Container(
-            padding: EdgeInsets.fromLTRB(
-                20, MediaQuery.of(context).size.height * .25, 20, 25),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   margin: EdgeInsets.only(bottom: 10),

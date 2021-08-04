@@ -116,7 +116,7 @@ class _AnnouncementState extends State<Announcement> {
                     ? Image.network(_imageFileList![index].path)
                     : Container(
                         width: MediaQuery.of(context).size.width * 0.35,
-                        height: MediaQuery.of(context).size.height * 0.15,
+                        height: MediaQuery.of(context).size.height * 0.20,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
@@ -385,7 +385,7 @@ class _AnnouncementState extends State<Announcement> {
                                     width:
                                         MediaQuery.of(context).size.width * 0.3,
                                     height: MediaQuery.of(context).size.height *
-                                        0.15,
+                                        0.20,
                                     child: _previewImages(),
                                   ),
                                 ),
