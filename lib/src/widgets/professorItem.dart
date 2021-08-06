@@ -6,13 +6,17 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ProfessorItem extends StatelessWidget {
   final Profile profile;
+  final Function onLongPress;
 
-  const ProfessorItem({Key? key, required this.profile}) : super(key: key);
+  const ProfessorItem(
+      {Key? key, required this.profile, required this.onLongPress})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
+        onLongPress: () => onLongPress(),
         onTap: () => Navigator.of(context).pushNamed(
           InspectProfessor.routeName,
           arguments: profile,

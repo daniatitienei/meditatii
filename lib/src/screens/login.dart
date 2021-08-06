@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:find_your_teacher/src/admob/admob.dart';
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
 import 'package:find_your_teacher/src/screens/forgotPassword.dart';
 import 'package:find_your_teacher/src/screens/home.dart';
 import 'package:find_your_teacher/src/screens/register.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,6 +29,8 @@ class _LoginState extends State<Login> {
   final _passwordController = TextEditingController();
 
   InterstitialAd? _interstitialAd;
+
+  bool obscureText = true;
 
   Widget _buildLoginButton() => Container(
         margin: EdgeInsets.only(top: 10),
@@ -119,9 +124,7 @@ class _LoginState extends State<Login> {
                   cursorColor: MyColors().purpleSixtyPercent,
                   validator: (email) => auth.validateLoginEmail(email),
                   style: GoogleFonts.roboto(
-                    textStyle: TextStyle(
-                      color: MyColors().purple,
-                    ),
+                    color: MyColors().purple,
                   ),
                   decoration: InputDecoration(
                     hintText: 'Email',
@@ -146,13 +149,30 @@ class _LoginState extends State<Login> {
                       validator: (password) =>
                           auth.validateLoginPassword(password),
                       cursorColor: MyColors().purpleSixtyPercent,
-                      obscureText: true,
+                      obscureText: this.obscureText,
                       style: GoogleFonts.roboto(
                         textStyle: TextStyle(
                           color: MyColors().purple,
                         ),
                       ),
                       decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              this.obscureText = !this.obscureText;
+                            });
+                          },
+                          icon: Icon(
+                            Platform.isIOS
+                                ? this.obscureText
+                                    ? CupertinoIcons.eye_slash
+                                    : CupertinoIcons.eye
+                                : this.obscureText
+                                    ? Icons.remove_red_eye_outlined
+                                    : Icons.remove_red_eye_rounded,
+                            color: MyColors().purple,
+                          ),
+                        ),
                         hintText: 'Parola',
                         hintStyle:
                             TextStyle(color: MyColors().purpleSixtyPercent),

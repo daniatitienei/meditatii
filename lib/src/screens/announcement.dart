@@ -171,6 +171,8 @@ class _AnnouncementState extends State<Announcement> {
   Widget _buildNameTextFormField(
           TextEditingController controller, String hintText) =>
       TextFormField(
+        keyboardType: TextInputType.text,
+        textCapitalization: TextCapitalization.sentences,
         controller: controller,
         cursorColor: MyColors().purple,
         validator: (name) => nameValidator(name, hintText),
@@ -196,6 +198,7 @@ class _AnnouncementState extends State<Announcement> {
         constraints:
             BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.2),
         child: TextFormField(
+          textCapitalization: TextCapitalization.sentences,
           controller: controller,
           cursorColor: MyColors().purple,
           minLines: 1,

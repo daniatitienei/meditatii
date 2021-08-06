@@ -3,6 +3,7 @@ import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
 import 'package:find_your_teacher/src/models/typeOfFilters.dart';
 import 'package:find_your_teacher/src/screens/Announcement.dart';
+import 'package:find_your_teacher/src/screens/MyAnnouncements.dart';
 import 'package:find_your_teacher/src/screens/favorites.dart';
 import 'package:find_your_teacher/src/screens/filters.dart';
 import 'package:find_your_teacher/src/screens/forgotPassword.dart';
@@ -46,6 +47,7 @@ class _MyAppState extends State<MyApp> {
         );
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         textTheme: TextTheme(
           bodyText1: TextStyle(),
@@ -71,6 +73,7 @@ class _MyAppState extends State<MyApp> {
         Announcement.routeName: (context) => Announcement(),
         Filters.routeName: (context) => Filters(),
         ForgotPassword.routeName: (context) => ForgotPassword(),
+        MyAnnouncements.routeName: (context) => MyAnnouncements(),
       },
       home: FutureBuilder(
         future: _initialization,

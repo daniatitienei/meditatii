@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:find_your_teacher/src/admob/admob.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
@@ -299,7 +302,13 @@ class _InspectProfState extends State<InspectProf> {
               });
             },
             icon: Icon(
-              isFav ? Icons.favorite : Icons.favorite_outline,
+              Platform.isAndroid
+                  ? isFav
+                      ? Icons.favorite
+                      : Icons.favorite_outline
+                  : isFav
+                      ? CupertinoIcons.heart_fill
+                      : CupertinoIcons.heart,
               size: 28,
             ),
           ),

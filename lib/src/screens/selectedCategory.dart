@@ -163,6 +163,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
                         return ProfessorItem(
+                          onLongPress: () {},
                           profile: Profile(
                             uuid: snapshot.data!.docs[index]['uuid'],
                             imgUrl: snapshot.data!.docs[index]['imgUrl'],

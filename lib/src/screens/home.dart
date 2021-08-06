@@ -1,11 +1,14 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:find_your_teacher/src/admob/admob.dart';
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
+import 'package:find_your_teacher/src/screens/MyAnnouncements.dart';
 import 'package:find_your_teacher/src/screens/favorites.dart';
 import 'package:find_your_teacher/src/widgets/addAnnouncement.dart';
+import 'package:find_your_teacher/src/widgets/drawer.dart';
 import 'package:find_your_teacher/src/widgets/materie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +17,7 @@ import 'package:flutter_shimmer/flutter_shimmer.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -42,27 +46,48 @@ class _HomeState extends State<Home> {
 
   PageController _pageController = PageController();
 
+  int navbarIndex = 0;
+
   Widget _BottomBar() => BottomAppBar(
         shape: CircularNotchedRectangle(),
         color: MyColors().purple,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              onPressed: () => _pageController.jumpToPage(0),
-              icon: Icon(
-                Icons.home,
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 2),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              IconButton(
+                onPressed: () {
+                  _pageController.jumpToPage(0);
+                  setState(() => this.navbarIndex = 0);
+                },
+                icon: Icon(
+                  Platform.isAndroid ? Icons.home : CupertinoIcons.home,
+                  size: this.navbarIndex == 0 ? 28 : 26,
+                  color: this.navbarIndex == 0
+                      ? Colors.white
+                      : Colors.grey.shade400,
+                ),
+                color: Colors.white,
               ),
-              color: Colors.white,
-            ),
-            IconButton(
-              onPressed: () => _pageController.jumpToPage(1),
-              icon: Icon(
-                Icons.favorite,
+              IconButton(
+                onPressed: () {
+                  _pageController.jumpToPage(1);
+                  setState(() => this.navbarIndex = 1);
+                },
+                icon: Icon(
+                  Platform.isAndroid
+                      ? Icons.favorite
+                      : CupertinoIcons.heart_fill,
+                  size: this.navbarIndex == 1 ? 28 : 26,
+                  color: this.navbarIndex == 1
+                      ? Colors.white
+                      : Colors.grey.shade400,
+                ),
+                color: Colors.white,
               ),
-              color: Colors.white,
-            ),
-          ],
+            ],
+          ),
         ),
       );
 
@@ -97,6 +122,16 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     MyFirestore().loadAnunturiLength();
     return Scaffold(
+      drawer: MyDrawer(
+          isStudent: this.isStudent,
+          interstitialAd: this._interstitialAd,
+          onFavoriteTap: () {
+            _pageController.jumpToPage(1);
+            setState(() {
+              this.navbarIndex = 1;
+            });
+            Navigator.of(context).pop();
+          }),
       backgroundColor: Colors.white,
       extendBody: true,
       floatingActionButton: this.isStudent ? null : AddAnouncement(),
@@ -136,6 +171,7 @@ class _HomeState extends State<Home> {
                 child: CustomScrollView(
                   slivers: [
                     SliverAppBar(
+                      iconTheme: IconThemeData(color: MyColors().purple),
                       backgroundColor: Colors.white,
                       // centerTitle: true,
                       flexibleSpace: FlexibleSpaceBar(
@@ -197,40 +233,8 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                     ),
-
-                    // Container(
-                    //   height: 50,
-                    // )
-                    // Container(
-                    //   height: 50,
-                    //   child: AdWidget(
-                    //     ad: myBanner,
-                    //   ),
-                    // ),
                   ],
                 ),
-                // child: Column(
-                //   children: [
-                //     Expanded(
-                //       child: ListView.builder(
-                //         itemBuilder: (context, index) => Materie(
-                //           circleColor: MyColors().circleColors[index],
-                //           backgroundColor: MyColors().backgroundColors[index],
-                //           title: snapshot.data!.docs[index].id,
-                //           announces: snapshot.data?.docs[index]['anunturi'],
-                //           imageUrl: snapshot.data!.docs[index]['imageUrl'],
-                //         ),
-                //         itemCount: snapshot.data?.docs.length,
-                //       ),
-                //     ),
-                //     Container(
-                //       height: 50,
-                //       child: AdWidget(
-                //         ad: myBanner,
-                //       ),
-                //     ),
-                //   ],
-                // ),
               ),
               Favorites(),
             ],
