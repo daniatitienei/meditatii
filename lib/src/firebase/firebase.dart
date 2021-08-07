@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -125,13 +126,85 @@ class MyFirebaseAuth {
         .pushNamedAndRemoveUntil(Login.routeName, (route) => false);
   }
 
-  Widget googleButton(context) => Container(
+  Widget googleButtonRegister({
+    required isStudent,
+    required context,
+    required InterstitialAd? interstitialAd,
+  }) =>
+      Container(
         width: MediaQuery.of(context).size.width,
         child: ElevatedButton(
           onPressed: () async {
             await signInWithGoogle();
             Navigator.of(context)
                 .pushNamedAndRemoveUntil(Home.routeName, (route) => false);
+
+            MyFirebaseAuth().addUser(
+              MyFirebaseAuth().auth.currentUser?.email,
+              isStudent,
+            );
+
+            interstitialAd?.show();
+
+            showToast(
+              'V-ați conectat cu succes.',
+              context: context,
+              animation: StyledToastAnimation.slideFromTopFade,
+              position: StyledToastPosition.top,
+              reverseAnimation: StyledToastAnimation.fade,
+              animDuration: Duration(seconds: 1),
+              duration: Duration(seconds: 2),
+              curve: Curves.elasticOut,
+              reverseCurve: Curves.linear,
+            );
+          },
+          style: ButtonStyle(
+            padding: MaterialStateProperty.all(
+              EdgeInsets.only(top: 14, bottom: 14),
+            ),
+            backgroundColor: MaterialStateProperty.all(
+              Colors.white,
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                'lib/src/assets/svg/google.svg',
+                width: 25,
+                height: 25,
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 10),
+                child: Text(
+                  'Continua cu Google'.toUpperCase(),
+                  style: GoogleFonts.roboto(
+                    textStyle: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+  Widget googleButtonLogin({
+    required context,
+    required InterstitialAd? interstitialAd,
+  }) =>
+      Container(
+        width: MediaQuery.of(context).size.width,
+        child: ElevatedButton(
+          onPressed: () async {
+            await signInWithGoogle();
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil(Home.routeName, (route) => false);
+
+            interstitialAd?.show();
+
             showToast(
               'V-ați conectat cu succes.',
               context: context,

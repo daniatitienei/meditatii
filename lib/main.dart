@@ -14,12 +14,16 @@ import 'package:find_your_teacher/src/screens/register.dart';
 import 'package:find_your_teacher/src/screens/selectedCategory.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   final initFuture = MobileAds.instance.initialize();
+
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   runApp(
     ChangeNotifierProvider(
@@ -80,7 +84,7 @@ class _MyAppState extends State<MyApp> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done &&
               !MyFirebaseAuth().isSignedIn())
-            return Login();
+            return Register();
           else if (snapshot.connectionState == ConnectionState.done &&
               MyFirebaseAuth().isSignedIn()) return Home();
           return Center(

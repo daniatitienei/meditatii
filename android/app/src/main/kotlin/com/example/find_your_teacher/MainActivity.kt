@@ -1,4 +1,4 @@
-package com.example.find_your_teacher
+package com.free.find_your_teacher
 
 import io.flutter.embedding.android.FlutterActivity
 

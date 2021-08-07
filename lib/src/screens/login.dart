@@ -207,6 +207,20 @@ class _LoginState extends State<Login> {
                   ],
                 ),
                 _buildLoginButton(),
+                Container(
+                  margin: EdgeInsets.only(top: 10, bottom: 5),
+                  child: Text(
+                    "SAU",
+                    style: GoogleFonts.roboto(
+                      textStyle: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        // fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+                auth.googleButtonLogin(
+                    context: context, interstitialAd: this._interstitialAd),
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushNamed(Register.routeName);
@@ -242,19 +256,6 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(top: 10, bottom: 10),
-                  child: Text(
-                    "SAU",
-                    style: GoogleFonts.roboto(
-                      textStyle: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        // fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-                auth.googleButton(context),
               ],
             ),
           ),

@@ -150,7 +150,7 @@ class RegisterState extends State<Register> {
                   ),
                 ),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     TextFormField(
                       obscureText: this.obscureText,
@@ -268,7 +268,11 @@ class RegisterState extends State<Register> {
                 Divider(
                   height: 5,
                 ),
-                myFirebase.googleButton(context),
+                myFirebase.googleButtonRegister(
+                  isStudent: this.isStudent,
+                  context: context,
+                  interstitialAd: this._interstitialAd,
+                ),
               ],
             ),
           ),
