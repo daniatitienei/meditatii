@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.find_your_teacher">
+    package="com.free.find_your_teacher">
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <queries>

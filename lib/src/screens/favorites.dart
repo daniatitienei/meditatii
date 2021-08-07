@@ -119,7 +119,6 @@ class _FavoritesState extends State<Favorites> {
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
-                      print(snapshot.data!.size);
                       final Profile profile = Profile(
                         uuid: snapshot.data!.docs[index]['uuid'],
                         imgUrl: snapshot.data!.docs[index]['imgUrl'],
