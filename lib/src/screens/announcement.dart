@@ -450,6 +450,23 @@ class _AnnouncementState extends State<Announcement> {
                               if (oras == '' || materie == '' || gen == '')
                                 return;
 
+                              // FIXME In caz de nu merge stergi asta
+                              if (_imageFileList?.length == null) {
+                                showToast(
+                                  'Trebuie să selectați o imagine.',
+                                  context: context,
+                                  animation:
+                                      StyledToastAnimation.slideFromTopFade,
+                                  position: StyledToastPosition.top,
+                                  reverseAnimation: StyledToastAnimation.fade,
+                                  animDuration: Duration(seconds: 1),
+                                  duration: Duration(seconds: 2),
+                                  curve: Curves.elasticOut,
+                                  reverseCurve: Curves.linear,
+                                );
+                                return;
+                              }
+
                               if (!_formKey.currentState!.validate()) return;
 
                               String uuid = Uuid().v1();
@@ -504,10 +521,7 @@ class _AnnouncementState extends State<Announcement> {
                                 ),
                               ),
                               backgroundColor: MaterialStateProperty.all(
-                                (oras == '' ||
-                                        materie == '' ||
-                                        gen == '' ||
-                                        _imageFileList?.length == null)
+                                (oras == '' || materie == '' || gen == '')
                                     ? MyColors().purpleSixtyPercent
                                     : MyColors().purple,
                               ),

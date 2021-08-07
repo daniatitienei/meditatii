@@ -165,6 +165,9 @@ class _HomeState extends State<Home> {
             );
 
           return PageView(
+            onPageChanged: (int newIndex) {
+              setState(() => this.navbarIndex = newIndex);
+            },
             controller: _pageController,
             children: [
               SafeArea(
