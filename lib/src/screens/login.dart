@@ -238,7 +238,7 @@ class _LoginState extends State<Login> {
                         ),
                         children: <TextSpan>[
                           TextSpan(
-                            text: 'Nu ai cont?',
+                            text: 'Nu ai cont? ',
                           ),
                           TextSpan(
                             text: 'Creaza-ti unul',

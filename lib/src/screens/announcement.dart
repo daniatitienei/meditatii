@@ -450,7 +450,6 @@ class _AnnouncementState extends State<Announcement> {
                               if (oras == '' || materie == '' || gen == '')
                                 return;
 
-                              // FIXME In caz de nu merge stergi asta
                               if (_imageFileList?.length == null) {
                                 showToast(
                                   'Trebuie să selectați o imagine.',
@@ -468,6 +467,23 @@ class _AnnouncementState extends State<Announcement> {
                               }
 
                               if (!_formKey.currentState!.validate()) return;
+
+                              showToast(
+                                'Anunțul a fost adăugat.',
+                                context: context,
+                                animation:
+                                    StyledToastAnimation.slideFromTopFade,
+                                position: StyledToastPosition.top,
+                                reverseAnimation: StyledToastAnimation.fade,
+                                animDuration: Duration(seconds: 1),
+                                duration: Duration(seconds: 2),
+                                curve: Curves.elasticOut,
+                                reverseCurve: Curves.linear,
+                              );
+
+                              this._interstitialAd?.show();
+
+                              Navigator.of(context).pop();
 
                               String uuid = Uuid().v1();
 
@@ -495,23 +511,6 @@ class _AnnouncementState extends State<Announcement> {
                                       '${this._firstNameController.text.toLowerCase()}${this._lastNameController.text.toLowerCase()}$uuid',
                                 ),
                               );
-
-                              this._interstitialAd?.show();
-
-                              showToast(
-                                'Anunțul a fost adăugat.',
-                                context: context,
-                                animation:
-                                    StyledToastAnimation.slideFromTopFade,
-                                position: StyledToastPosition.top,
-                                reverseAnimation: StyledToastAnimation.fade,
-                                animDuration: Duration(seconds: 1),
-                                duration: Duration(seconds: 2),
-                                curve: Curves.elasticOut,
-                                reverseCurve: Curves.linear,
-                              );
-
-                              Navigator.of(context).pop();
                             },
                             style: ButtonStyle(
                               padding: MaterialStateProperty.all(

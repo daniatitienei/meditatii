@@ -1,22 +1,24 @@
-TODO -  Sortare ( gata )
-TODO - Toate orasele ( gata )
+DONE -  Sortare ( gata )
+DONE - Toate orasele ( gata )
 TODO - Bara de cautare la profesori ( poate )
 TODO - Rating (creez un array si dupa fac suma / array.length + 1)
 TODO - Dynamic Links 
-TODO - AdMob ( gata )
-TODO - Shimmer effect ( gata )
-TODO - Pe home scroll ul este bugat ( gata )
-TODO - Toast notification (cand faci un anunt, cand iti faci cont, cand te loghezi si cand te deloghezi) ( gata )
-TODO - Firebase Storage bug poza isi ia replace ( gata )
-TODO - Sa dau trim la nume ( gata )
-TODO - Provider installer error ( gata )
-TODO - Bug la favorite ( gata )
-TODO - Sa pun iar sliver pe home si favorite ( gata )
-TODO - Am uitat parola ( gata )
-TODO - Trebuie sa fac sa adauge favorite in firebase cand faci un cont ( gata ) 
-TODO - Nu si da seama daca e profesor sau elev ( gata )
-TODO - Sa fac panou cu anunturile postate ca sa poata fi sterse ( gata )
-TODO - Sa afiseze un toast daca nu pui poza
+DONE - AdMob ( gata )
+DONE - Shimmer effect ( gata )
+DONE - Pe home scroll ul este bugat ( gata )
+DONE - Toast notification (cand faci un anunt, cand iti faci cont, cand te loghezi si cand te deloghezi) ( gata )
+DONE - Firebase Storage bug poza isi ia replace ( gata )
+DONE - Sa dau trim la nume ( gata )
+DONE - Provider installer error ( gata )
+DONE - Bug la favorite ( gata )
+DONE - Sa pun iar sliver pe home si favorite ( gata )
+DONE - Am uitat parola ( gata )
+DONE - Trebuie sa fac sa adauge favorite in firebase cand faci un cont ( gata ) 
+DONE - Nu si da seama daca e profesor sau elev ( gata )
+DONE - Sa fac panou cu anunturile postate ca sa poata fi sterse ( gata )
+DONE - Sa afiseze un toast daca nu pui poza
+DONE - Sa se puna anuntul doar o singura data
 
 REVIEW - READY TO LAUNCH
+
 

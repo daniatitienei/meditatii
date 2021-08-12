@@ -119,9 +119,9 @@ class _InspectProfState extends State<InspectProf> {
             left: 20,
             right: 20,
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,15 +146,18 @@ class _InspectProfState extends State<InspectProf> {
                         ),
                         child: Container(
                           padding: EdgeInsets.only(top: 10),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: Text(
-                              profile.description.trim() == ''
-                                  ? 'Nicio descriere'
-                                  : profile.description,
-                              style: GoogleFonts.roboto(
-                                textStyle: TextStyle(
-                                  fontSize: 16,
+                          child: Scrollbar(
+                            isAlwaysShown: true,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Text(
+                                profile.description.trim() == ''
+                                    ? 'Nicio descriere'
+                                    : profile.description,
+                                style: GoogleFonts.roboto(
+                                  textStyle: TextStyle(
+                                    fontSize: 16,
+                                  ),
                                 ),
                               ),
                             ),

@@ -64,9 +64,8 @@ class RegisterState extends State<Register> {
               reverseCurve: Curves.linear,
             );
 
-            if (myFirebase.auth.currentUser != null)
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil(Home.routeName, (route) => false);
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil(Home.routeName, (route) => false);
           },
           style: ButtonStyle(
             padding: MaterialStateProperty.all(

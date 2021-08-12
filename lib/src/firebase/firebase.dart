@@ -326,6 +326,19 @@ class MyFirestore {
     final homeAnnouncement = FirebaseFirestore.instance
         .doc('materii/${profile.materie}/anunturi/${profile.uuid}')
         .delete();
+
+    int? count;
+
+    FirebaseFirestore.instance
+        .doc('materii/${profile.materie}')
+        .get()
+        .then((data) => count = data['anunturi']);
+
+    final updateCount =
+        FirebaseFirestore.instance.doc('materii/${profile.materie}').update({
+      'anunturi': count! - 1,
+    });
+
     final myAnnoucement = FirebaseFirestore.instance
         .doc(
             'users/${MyFirebaseAuth().auth.currentUser!.email}/anunturi/${profile.uuid}')
