@@ -71,7 +71,6 @@ flutter:
     - lib/src/assets/svg/google.svg
     - lib/src/assets/svg/user.svg
     - lib/src/assets/svg/student.svg
-    - lib/src/assets/svg/professor.svg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
