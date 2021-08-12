@@ -6,6 +6,7 @@ import 'package:find_your_teacher/src/firebase/firebase.dart';
 import 'package:find_your_teacher/src/screens/forgotPassword.dart';
 import 'package:find_your_teacher/src/screens/home.dart';
 import 'package:find_your_teacher/src/screens/register.dart';
+import 'package:find_your_teacher/src/screens/selectType.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -69,10 +70,15 @@ class _LoginState extends State<Login> {
             backgroundColor: MaterialStateProperty.all(
               MyColors().purple,
             ),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(10),
+              ),
+            ),
           ),
           child: Text(
             'Intra in cont'.toUpperCase(),
-            style: GoogleFonts.roboto(
+            style: GoogleFonts.montserrat(
               textStyle: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 15,
@@ -114,8 +120,11 @@ class _LoginState extends State<Login> {
                   margin: EdgeInsets.only(bottom: 10),
                   child: Text(
                     'Bine ai revenit!',
-                    style: GoogleFonts.robotoSlab(
-                      textStyle: TextStyle(fontSize: 32),
+                    style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),
@@ -123,7 +132,7 @@ class _LoginState extends State<Login> {
                   controller: _emailController,
                   cursorColor: MyColors().purpleSixtyPercent,
                   validator: (email) => auth.validateLoginEmail(email),
-                  style: GoogleFonts.roboto(
+                  style: GoogleFonts.montserrat(
                     color: MyColors().purple,
                   ),
                   decoration: InputDecoration(
@@ -150,7 +159,7 @@ class _LoginState extends State<Login> {
                           auth.validateLoginPassword(password),
                       cursorColor: MyColors().purpleSixtyPercent,
                       obscureText: this.obscureText,
-                      style: GoogleFonts.roboto(
+                      style: GoogleFonts.montserrat(
                         textStyle: TextStyle(
                           color: MyColors().purple,
                         ),
@@ -195,7 +204,7 @@ class _LoginState extends State<Login> {
                         margin: EdgeInsets.only(top: 8),
                         child: Text(
                           'Ai uitat parola?',
-                          style: GoogleFonts.roboto(
+                          style: GoogleFonts.montserrat(
                             textStyle: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 14,
@@ -211,7 +220,7 @@ class _LoginState extends State<Login> {
                   margin: EdgeInsets.only(top: 10, bottom: 5),
                   child: Text(
                     "SAU",
-                    style: GoogleFonts.roboto(
+                    style: GoogleFonts.montserrat(
                       textStyle: TextStyle(
                         fontWeight: FontWeight.w700,
                         // fontSize: 16,
@@ -223,13 +232,13 @@ class _LoginState extends State<Login> {
                     context: context, interstitialAd: this._interstitialAd),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).pushNamed(Register.routeName);
+                    Navigator.of(context).pushNamed(SelectType.routeName);
                   },
                   child: Container(
                     margin: EdgeInsets.only(top: 8),
                     child: RichText(
                       text: TextSpan(
-                        style: GoogleFonts.roboto(
+                        style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 15,
@@ -241,8 +250,8 @@ class _LoginState extends State<Login> {
                             text: 'Nu ai cont? ',
                           ),
                           TextSpan(
-                            text: 'Creaza-ti unul',
-                            style: GoogleFonts.roboto(
+                            text: 'Crează-ți unul',
+                            style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 15,

@@ -178,7 +178,7 @@ class _HomeState extends State<Home> {
                       flexibleSpace: FlexibleSpaceBar(
                         title: Text(
                           'Materii',
-                          style: GoogleFonts.roboto(
+                          style: GoogleFonts.montserrat(
                             color: MyColors().purple,
                           ),
                         ),

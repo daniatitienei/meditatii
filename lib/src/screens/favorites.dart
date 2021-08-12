@@ -71,7 +71,7 @@ class _FavoritesState extends State<Favorites> {
                 flexibleSpace: FlexibleSpaceBar(
                   title: Text(
                     'Favorite',
-                    style: GoogleFonts.roboto(
+                    style: GoogleFonts.montserrat(
                       color: MyColors().purple,
                     ),
                   ),

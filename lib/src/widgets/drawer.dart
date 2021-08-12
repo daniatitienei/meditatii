@@ -37,18 +37,18 @@ class MyDrawer extends StatelessWidget {
               children: [
                 Text(
                   this.isStudent ? 'Student' : 'Profesor',
-                  style: GoogleFonts.lato(
+                  style: GoogleFonts.montserrat(
                     color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 Text(
                   '${MyFirebaseAuth().auth.currentUser!.email}',
-                  style: GoogleFonts.lato(
+                  style: GoogleFonts.montserrat(
                     color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
@@ -62,8 +62,9 @@ class MyDrawer extends StatelessWidget {
               },
               title: Text(
                 'Anunțurile mele',
-                style: GoogleFonts.roboto(
+                style: GoogleFonts.montserrat(
                   color: MyColors().purple,
+                  fontSize: 14,
                 ),
               ),
               leading: Icon(
@@ -77,7 +78,7 @@ class MyDrawer extends StatelessWidget {
             onTap: () => onFavoriteTap(),
             title: Text(
               'Favorite',
-              style: GoogleFonts.roboto(
+              style: GoogleFonts.montserrat(
                 color: MyColors().purple,
               ),
             ),
@@ -90,7 +91,7 @@ class MyDrawer extends StatelessWidget {
             onTap: () => MyFirebaseAuth().signOut(context),
             title: Text(
               'Deconectare',
-              style: GoogleFonts.roboto(
+              style: GoogleFonts.montserrat(
                 color: MyColors().purple,
               ),
             ),

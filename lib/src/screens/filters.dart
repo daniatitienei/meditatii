@@ -88,10 +88,10 @@ class _FiltersState extends State<Filters> {
                         children: [
                           Text(
                             'Filtre',
-                            style: GoogleFonts.roboto(
+                            style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.w700,
+                                fontSize: 30,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
@@ -102,7 +102,7 @@ class _FiltersState extends State<Filters> {
                                 margin: EdgeInsets.only(top: 15),
                                 child: Text(
                                   'Ordonează după:',
-                                  style: GoogleFonts.roboto(
+                                  style: GoogleFonts.montserrat(
                                     fontSize: 16,
                                   ),
                                 ),
@@ -131,15 +131,15 @@ class _FiltersState extends State<Filters> {
                                     BoxShadow(color: Colors.transparent)
                                   ],
                                   borderRadius: BorderRadius.circular(10),
-                                  selectedTextStyle: GoogleFonts.roboto(
+                                  selectedTextStyle: GoogleFonts.montserrat(
                                     textStyle: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  unselectedTextStyle: GoogleFonts.roboto(
+                                  unselectedTextStyle: GoogleFonts.montserrat(
                                     textStyle: TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
@@ -154,7 +154,7 @@ class _FiltersState extends State<Filters> {
                                 margin: EdgeInsets.only(top: 15),
                                 child: Text(
                                   'Locație',
-                                  style: GoogleFonts.roboto(
+                                  style: GoogleFonts.montserrat(
                                     fontSize: 16,
                                   ),
                                 ),
@@ -196,16 +196,20 @@ class _FiltersState extends State<Filters> {
                             backgroundColor:
                                 MaterialStateProperty.all(MyColors().purple),
                             padding: MaterialStateProperty.all(
-                              EdgeInsets.only(
-                                top: 10,
-                                bottom: 10,
+                              EdgeInsets.symmetric(
+                                vertical: 12,
+                              ),
+                            ),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(10),
                               ),
                             ),
                           ),
                           child: Text(
                             'Salvează modificările',
-                            style: GoogleFonts.roboto(
-                              fontSize: 18,
+                            style: GoogleFonts.montserrat(
+                              fontSize: 16,
                               fontWeight: FontWeight.w700,
                             ),
                           ),

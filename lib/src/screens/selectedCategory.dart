@@ -119,9 +119,9 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                 SliverAppBar(
                   iconTheme: IconThemeData(color: MyColors().purple),
                   floating: true,
-                  pinned: true,
+                  pinned: false,
                   snap: true,
-                  expandedHeight: 80,
+                  expandedHeight: 70,
                   backgroundColor: Colors.white,
                   actions: [
                     IconButton(
@@ -143,7 +143,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                   flexibleSpace: FlexibleSpaceBar(
                     title: Text(
                       args.title,
-                      style: GoogleFonts.roboto(
+                      style: GoogleFonts.montserrat(
                         color: MyColors().purple,
                       ),
                     ),

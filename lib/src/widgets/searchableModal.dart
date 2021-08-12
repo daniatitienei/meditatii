@@ -45,50 +45,45 @@ class _SearchableState extends State<Searchable> {
   }
 
   _buildSearchableModal() => showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
+        ),
         context: context,
         builder: (context) => Container(
-          padding: EdgeInsets.only(left: 15, right: 15),
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
           child: Column(
             children: [
-              Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(right: 5),
-                    child: Icon(
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: TextField(
+                  onChanged: (value) => _runFilter(value),
+                  controller: _searchController,
+                  cursorColor: MyColors().purple,
+                  style: GoogleFonts.montserrat(
+                    textStyle: TextStyle(color: MyColors().purple),
+                  ),
+                  decoration: InputDecoration(
+                    icon: Icon(
                       Icons.search,
                       color: MyColors().purple,
                     ),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      onChanged: (value) => _runFilter(value),
-                      controller: _searchController,
-                      cursorColor: MyColors().purple,
-                      style: GoogleFonts.roboto(
-                        textStyle: TextStyle(color: MyColors().purple),
-                      ),
-                      decoration: InputDecoration(
-                        hintText: 'Scrieti aici',
-                        hintStyle: GoogleFonts.roboto(
-                          color: MyColors().purpleSixtyPercent,
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
-                        ),
-                      ),
+                    hintText: 'Scrieti aici',
+                    hintStyle: GoogleFonts.montserrat(
+                      color: MyColors().purpleSixtyPercent,
                     ),
+                    border: InputBorder.none,
                   ),
-                ],
-              ),
-              Divider(
-                thickness: 1,
-                color: MyColors().purple,
+                ),
               ),
               Expanded(
                 child: ListView.builder(
+                  padding: EdgeInsets.only(top: 15),
+                  physics: BouncingScrollPhysics(),
                   itemBuilder: (context, index) => ListTile(
                     onTap: () {
                       widget.callBack(_foundSearches[index]);
@@ -99,7 +94,10 @@ class _SearchableState extends State<Searchable> {
 
                       Navigator.of(context).pop();
                     },
-                    leading: Text(_foundSearches[index]),
+                    leading: Text(
+                      _foundSearches[index],
+                      style: GoogleFonts.montserrat(),
+                    ),
                   ),
                   itemCount: _foundSearches.length,
                 ),
@@ -134,7 +132,7 @@ class _SearchableState extends State<Searchable> {
         padding: EdgeInsets.only(bottom: 10),
         child: Text(
           _selectedItem == null ? widget.defaultValue : _selectedItem!,
-          style: GoogleFonts.roboto(
+          style: GoogleFonts.montserrat(
             fontSize: 16,
             color: _selectedItem == null
                 ? MyColors().purpleSixtyPercent

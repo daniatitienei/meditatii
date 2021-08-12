@@ -57,21 +57,21 @@ class Materie extends StatelessWidget {
         title: Text(
           this.title,
           overflow: TextOverflow.ellipsis,
-          style: GoogleFonts.roboto(
+          style: GoogleFonts.montserrat(
             textStyle: TextStyle(
               color: MyColors().purple,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),
         subtitle: Text(
           '${this.announces} anunțuri',
           overflow: TextOverflow.ellipsis,
-          style: GoogleFonts.roboto(
+          style: GoogleFonts.montserrat(
             textStyle: TextStyle(
               color: MyColors().purple,
-              fontSize: 14,
+              fontSize: 13,
               fontWeight: FontWeight.w300,
             ),
           ),

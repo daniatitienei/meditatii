@@ -176,12 +176,12 @@ class _AnnouncementState extends State<Announcement> {
         controller: controller,
         cursorColor: MyColors().purple,
         validator: (name) => nameValidator(name, hintText),
-        style: GoogleFonts.roboto(
+        style: GoogleFonts.montserrat(
           textStyle: TextStyle(color: MyColors().purple),
         ),
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: GoogleFonts.roboto(
+          hintStyle: GoogleFonts.montserrat(
             color: MyColors().purpleSixtyPercent,
           ),
           focusedBorder: UnderlineInputBorder(
@@ -204,12 +204,12 @@ class _AnnouncementState extends State<Announcement> {
           minLines: 1,
           maxLines: 10,
           keyboardType: TextInputType.multiline,
-          style: GoogleFonts.roboto(
+          style: GoogleFonts.montserrat(
             textStyle: TextStyle(color: MyColors().purple),
           ),
           decoration: InputDecoration(
             hintText: 'Descriere',
-            hintStyle: GoogleFonts.roboto(
+            hintStyle: GoogleFonts.montserrat(
               color: MyColors().purpleSixtyPercent,
             ),
             focusedBorder: UnderlineInputBorder(
@@ -232,12 +232,12 @@ class _AnnouncementState extends State<Announcement> {
         cursorColor: MyColors().purple,
         keyboardType: TextInputType.number,
         validator: (number) => phoneValidator(number),
-        style: GoogleFonts.roboto(
+        style: GoogleFonts.montserrat(
           textStyle: TextStyle(color: MyColors().purple),
         ),
         decoration: InputDecoration(
           hintText: 'Număr de telefon',
-          hintStyle: GoogleFonts.roboto(
+          hintStyle: GoogleFonts.montserrat(
             color: MyColors().purpleSixtyPercent,
           ),
           focusedBorder: UnderlineInputBorder(
@@ -253,12 +253,12 @@ class _AnnouncementState extends State<Announcement> {
       TextFormField(
         controller: controller,
         cursorColor: MyColors().purple,
-        style: GoogleFonts.roboto(
+        style: GoogleFonts.montserrat(
           textStyle: TextStyle(color: MyColors().purple),
         ),
         decoration: InputDecoration(
           hintText: 'Email',
-          hintStyle: GoogleFonts.roboto(
+          hintStyle: GoogleFonts.montserrat(
             color: MyColors().purpleSixtyPercent,
           ),
           focusedBorder: UnderlineInputBorder(
@@ -281,12 +281,12 @@ class _AnnouncementState extends State<Announcement> {
           cursorColor: MyColors().purple,
           keyboardType: TextInputType.number,
           validator: (value) => priceValidator(value),
-          style: GoogleFonts.roboto(
+          style: GoogleFonts.montserrat(
             textStyle: TextStyle(color: MyColors().purple),
           ),
           decoration: InputDecoration(
             hintText: 'Preț pe sesiune',
-            hintStyle: GoogleFonts.roboto(
+            hintStyle: GoogleFonts.montserrat(
               color: MyColors().purpleSixtyPercent,
             ),
             focusedBorder: UnderlineInputBorder(
@@ -342,7 +342,7 @@ class _AnnouncementState extends State<Announcement> {
         backgroundColor: Colors.white,
         title: Text(
           'Adaugă un anunț',
-          style: GoogleFonts.roboto(
+          style: GoogleFonts.montserrat(
             color: MyColors().purple,
           ),
         ),
@@ -407,8 +407,8 @@ class _AnnouncementState extends State<Announcement> {
                                 _buildPriceTextFormField(_priceController),
                                 Text(
                                   'LEI',
-                                  style: GoogleFonts.roboto(
-                                    fontSize: 18,
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 16,
                                   ),
                                 ),
                               ],
@@ -483,8 +483,6 @@ class _AnnouncementState extends State<Announcement> {
 
                               this._interstitialAd?.show();
 
-                              Navigator.of(context).pop();
-
                               String uuid = Uuid().v1();
 
                               await MyFirebaseStorage().uploadFile(
@@ -511,6 +509,8 @@ class _AnnouncementState extends State<Announcement> {
                                       '${this._firstNameController.text.toLowerCase()}${this._lastNameController.text.toLowerCase()}$uuid',
                                 ),
                               );
+
+                              Navigator.of(context).pop();
                             },
                             style: ButtonStyle(
                               padding: MaterialStateProperty.all(
@@ -524,12 +524,17 @@ class _AnnouncementState extends State<Announcement> {
                                     ? MyColors().purpleSixtyPercent
                                     : MyColors().purple,
                               ),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: new BorderRadius.circular(10),
+                                ),
+                              ),
                             ),
                             child: Text(
                               'Adăugați anunțul',
-                              style: GoogleFonts.roboto(
+                              style: GoogleFonts.montserrat(
                                 textStyle: TextStyle(
-                                  fontSize: 17,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),

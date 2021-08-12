@@ -165,6 +165,11 @@ class MyFirebaseAuth {
             backgroundColor: MaterialStateProperty.all(
               Colors.white,
             ),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(10),
+              ),
+            ),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -177,8 +182,8 @@ class MyFirebaseAuth {
               Container(
                 margin: EdgeInsets.only(left: 10),
                 child: Text(
-                  'Continua cu Google'.toUpperCase(),
-                  style: GoogleFonts.roboto(
+                  'Continuă cu Google'.toUpperCase(),
+                  style: GoogleFonts.montserrat(
                     textStyle: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w700,
@@ -224,6 +229,11 @@ class MyFirebaseAuth {
             backgroundColor: MaterialStateProperty.all(
               Colors.white,
             ),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(10),
+              ),
+            ),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -236,8 +246,8 @@ class MyFirebaseAuth {
               Container(
                 margin: EdgeInsets.only(left: 10),
                 child: Text(
-                  'Continua cu Google'.toUpperCase(),
-                  style: GoogleFonts.roboto(
+                  'Continuă cu Google'.toUpperCase(),
+                  style: GoogleFonts.montserrat(
                     textStyle: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w700,
@@ -326,18 +336,6 @@ class MyFirestore {
     final homeAnnouncement = FirebaseFirestore.instance
         .doc('materii/${profile.materie}/anunturi/${profile.uuid}')
         .delete();
-
-    int? count;
-
-    FirebaseFirestore.instance
-        .doc('materii/${profile.materie}')
-        .get()
-        .then((data) => count = data['anunturi']);
-
-    final updateCount =
-        FirebaseFirestore.instance.doc('materii/${profile.materie}').update({
-      'anunturi': count! - 1,
-    });
 
     final myAnnoucement = FirebaseFirestore.instance
         .doc(

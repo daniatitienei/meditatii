@@ -11,6 +11,7 @@ import 'package:find_your_teacher/src/screens/home.dart';
 import 'package:find_your_teacher/src/screens/inspectProfessor.dart';
 import 'package:find_your_teacher/src/screens/login.dart';
 import 'package:find_your_teacher/src/screens/register.dart';
+import 'package:find_your_teacher/src/screens/selectType.dart';
 import 'package:find_your_teacher/src/screens/selectedCategory.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -78,13 +79,14 @@ class _MyAppState extends State<MyApp> {
         Filters.routeName: (context) => Filters(),
         ForgotPassword.routeName: (context) => ForgotPassword(),
         MyAnnouncements.routeName: (context) => MyAnnouncements(),
+        SelectType.routeName: (context) => SelectType(),
       },
       home: FutureBuilder(
         future: _initialization,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done &&
               !MyFirebaseAuth().isSignedIn())
-            return Register();
+            return SelectType();
           else if (snapshot.connectionState == ConnectionState.done &&
               MyFirebaseAuth().isSignedIn()) return Home();
           return Center(

@@ -72,7 +72,7 @@ class _InspectProfState extends State<InspectProf> {
                       child: Text(
                         '${profile.firstName} ${profile.secondName}',
                         overflow: TextOverflow.fade,
-                        style: GoogleFonts.roboto(
+                        style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
                             color: Colors.white,
                             fontSize: 24,
@@ -84,7 +84,7 @@ class _InspectProfState extends State<InspectProf> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         'Profesor de ${profile.materie.toLowerCase()}',
-                        style: GoogleFonts.roboto(
+                        style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
                             color: Colors.white,
                             fontSize: 14,
@@ -132,9 +132,9 @@ class _InspectProfState extends State<InspectProf> {
                       Container(
                         child: Text(
                           'Despre ${profile.firstName} ${profile.secondName}',
-                          style: GoogleFonts.roboto(
+                          style: GoogleFonts.montserrat(
                             textStyle: TextStyle(
-                              fontSize: 16,
+                              fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -154,9 +154,9 @@ class _InspectProfState extends State<InspectProf> {
                                 profile.description.trim() == ''
                                     ? 'Nicio descriere'
                                     : profile.description,
-                                style: GoogleFonts.roboto(
+                                style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 15,
                                   ),
                                 ),
                               ),
@@ -175,9 +175,9 @@ class _InspectProfState extends State<InspectProf> {
                       children: [
                         Text(
                           'Preț pe sesiune',
-                          style: GoogleFonts.roboto(
+                          style: GoogleFonts.montserrat(
                             textStyle: TextStyle(
-                              fontSize: 16,
+                              fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -186,9 +186,9 @@ class _InspectProfState extends State<InspectProf> {
                           margin: EdgeInsets.only(top: 5),
                           child: Text(
                             '${profile.price} LEI',
-                            style: GoogleFonts.roboto(
+                            style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
-                                fontSize: 16,
+                                fontSize: 15,
                               ),
                             ),
                           ),
@@ -205,9 +205,9 @@ class _InspectProfState extends State<InspectProf> {
                       children: [
                         Text(
                           'Contact',
-                          style: GoogleFonts.roboto(
+                          style: GoogleFonts.montserrat(
                             textStyle: TextStyle(
-                              fontSize: 16,
+                              fontSize: 15,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -221,10 +221,10 @@ class _InspectProfState extends State<InspectProf> {
                           ),
                           title: Text(
                             profile.phoneNumber,
-                            style: GoogleFonts.roboto(
+                            style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
                                 color: MyColors().purple,
-                                fontSize: 15,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
@@ -239,10 +239,10 @@ class _InspectProfState extends State<InspectProf> {
                           ),
                           title: Text(
                             profile.email,
-                            style: GoogleFonts.roboto(
+                            style: GoogleFonts.montserrat(
                               textStyle: TextStyle(
                                 color: MyColors().purple,
-                                fontSize: 15,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),

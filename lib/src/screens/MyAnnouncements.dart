@@ -50,7 +50,13 @@ class _MyAnnouncementsState extends State<MyAnnouncements> {
   Future<void> _deleteDialog(Profile profile) async => showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Doriți să ștergeți anunțul?'),
+          title: Text(
+            'Doriți să ștergeți anunțul?',
+            style: GoogleFonts.montserrat(
+              color: MyColors().purple,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
           actions: <Widget>[
             TextButton(
               style: ButtonStyle(
@@ -60,8 +66,9 @@ class _MyAnnouncementsState extends State<MyAnnouncements> {
               ),
               child: Text(
                 'Nu',
-                style: GoogleFonts.roboto(
+                style: GoogleFonts.montserrat(
                   color: Colors.white,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               onPressed: () => Navigator.of(context).pop(),
@@ -74,8 +81,9 @@ class _MyAnnouncementsState extends State<MyAnnouncements> {
               ),
               child: Text(
                 'Da',
-                style: GoogleFonts.roboto(
+                style: GoogleFonts.montserrat(
                   color: Colors.white,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               onPressed: () {
@@ -110,7 +118,7 @@ class _MyAnnouncementsState extends State<MyAnnouncements> {
                   flexibleSpace: FlexibleSpaceBar(
                     title: Text(
                       'Anunțurile mele',
-                      style: GoogleFonts.roboto(
+                      style: GoogleFonts.montserrat(
                         color: MyColors().purple,
                       ),
                     ),

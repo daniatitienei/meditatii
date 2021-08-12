@@ -24,7 +24,7 @@ class ProfessorItem extends StatelessWidget {
         title: Text(
           '${profile.firstName} ${profile.secondName}',
           overflow: TextOverflow.ellipsis,
-          style: GoogleFonts.roboto(color: MyColors().purple),
+          style: GoogleFonts.montserrat(color: MyColors().purple),
         ),
         // Animatie hero
         leading: Hero(
@@ -40,7 +40,7 @@ class ProfessorItem extends StatelessWidget {
         subtitle: Text(
           profile.city,
           overflow: TextOverflow.ellipsis,
-          style: GoogleFonts.roboto(color: MyColors().purpleSixtyPercent),
+          style: GoogleFonts.montserrat(color: MyColors().purpleSixtyPercent),
         ),
       ),
     );

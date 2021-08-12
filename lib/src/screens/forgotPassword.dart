@@ -43,7 +43,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 margin: EdgeInsets.only(bottom: 20),
                 child: Text(
                   'Resetare parolă',
-                  style: GoogleFonts.roboto(
+                  style: GoogleFonts.montserrat(
                     color: MyColors().purple,
                     fontSize: 28,
                     fontWeight: FontWeight.w600,
@@ -56,7 +56,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   if (value!.isEmpty) return 'Email-ul trebuie completat.';
                 },
                 cursorColor: MyColors().purpleSixtyPercent,
-                style: GoogleFonts.roboto(
+                style: GoogleFonts.montserrat(
                   textStyle: TextStyle(
                     color: MyColors().purple,
                   ),
@@ -112,8 +112,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   ),
                   child: Text(
                     'Resetează parola',
-                    style: GoogleFonts.roboto(
-                      fontWeight: FontWeight.w700,
+                    style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.w500,
                       fontSize: 15,
                     ),
                   ),

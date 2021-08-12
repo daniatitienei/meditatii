@@ -5,6 +5,7 @@ import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
 import 'package:find_your_teacher/src/screens/home.dart';
 import 'package:find_your_teacher/src/screens/login.dart';
+import 'package:find_your_teacher/src/screens/selectType.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -28,13 +29,11 @@ class RegisterState extends State<Register> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  bool isStudent = true;
-
   InterstitialAd? _interstitialAd;
 
   bool obscureText = true;
 
-  Widget _buildRegisterButton() => Container(
+  Widget _buildRegisterButton(bool isStudent) => Container(
         margin: EdgeInsets.only(top: 10),
         width: MediaQuery.of(context).size.width,
         child: ElevatedButton(
@@ -74,10 +73,15 @@ class RegisterState extends State<Register> {
             backgroundColor: MaterialStateProperty.all(
               MyColors().purple,
             ),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(10),
+              ),
+            ),
           ),
           child: Text(
-            'Creaza cont'.toUpperCase(),
-            style: GoogleFonts.roboto(
+            'Crează cont'.toUpperCase(),
+            style: GoogleFonts.montserrat(
               textStyle: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 15,
@@ -91,20 +95,22 @@ class RegisterState extends State<Register> {
   void initState() {
     super.initState();
     InterstitialAd.load(
-        adUnitId: AdMob().interstitialAdId,
-        request: AdRequest(),
-        adLoadCallback: InterstitialAdLoadCallback(
-          onAdLoaded: (InterstitialAd ad) {
-            this._interstitialAd = ad;
-          },
-          onAdFailedToLoad: (LoadAdError error) {
-            print('InterstitialAd failed to load: $error');
-          },
-        ));
+      adUnitId: AdMob().interstitialAdId,
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          this._interstitialAd = ad;
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          print('InterstitialAd failed to load: $error');
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Student;
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       body: Form(
@@ -119,8 +125,11 @@ class RegisterState extends State<Register> {
                   margin: EdgeInsets.only(bottom: 10),
                   child: Text(
                     'Bine ai venit!',
-                    style: GoogleFonts.robotoSlab(
-                      textStyle: TextStyle(fontSize: 32),
+                    style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),
@@ -128,7 +137,7 @@ class RegisterState extends State<Register> {
                   cursorColor: MyColors().purpleSixtyPercent,
                   controller: _emailController,
                   validator: (email) => myFirebase.validateRegisterEmail(email),
-                  style: GoogleFonts.roboto(
+                  style: GoogleFonts.montserrat(
                     textStyle: TextStyle(
                       color: MyColors().purple,
                     ),
@@ -157,7 +166,7 @@ class RegisterState extends State<Register> {
                       validator: (password) =>
                           myFirebase.validateRegisterPassword(password),
                       cursorColor: MyColors().purpleSixtyPercent,
-                      style: GoogleFonts.roboto(
+                      style: GoogleFonts.montserrat(
                         textStyle: TextStyle(
                           color: MyColors().purple,
                         ),
@@ -203,7 +212,7 @@ class RegisterState extends State<Register> {
                         margin: EdgeInsets.only(top: 8),
                         child: Text(
                           'Am cont',
-                          style: GoogleFonts.roboto(
+                          style: GoogleFonts.montserrat(
                             textStyle: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 14,
@@ -214,50 +223,13 @@ class RegisterState extends State<Register> {
                     )
                   ],
                 ),
-                GroupButton(
-                  isRadio: true,
-                  selectedButton: 0,
-                  buttons: ["Elev", "Profesor"],
-                  onSelected: (index, isSelected) {
-                    if (index == 0)
-                      setState(() {
-                        isStudent = true;
-                      });
-                    else
-                      setState(() {
-                        isStudent = false;
-                      });
-                  },
-                  spacing: 10,
-                  selectedColor: MyColors().purple,
-                  borderRadius: BorderRadius.circular(10),
-                  unselectedColor: MyColors().purpleSixtyPercent,
-                  selectedShadow: <BoxShadow>[
-                    BoxShadow(color: Colors.transparent)
-                  ],
-                  unselectedShadow: <BoxShadow>[
-                    BoxShadow(color: Colors.transparent)
-                  ],
-                  selectedTextStyle: GoogleFonts.roboto(
-                    textStyle: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  unselectedTextStyle: GoogleFonts.roboto(
-                    textStyle: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                _buildRegisterButton(),
+                _buildRegisterButton(args.isStudent),
                 Divider(
                   height: 5,
                 ),
                 Text(
                   "SAU",
-                  style: GoogleFonts.roboto(
+                  style: GoogleFonts.montserrat(
                     textStyle: TextStyle(
                       fontWeight: FontWeight.w600,
                       // fontSize: 16,
@@ -268,7 +240,7 @@ class RegisterState extends State<Register> {
                   height: 5,
                 ),
                 myFirebase.googleButtonRegister(
-                  isStudent: this.isStudent,
+                  isStudent: args.isStudent,
                   context: context,
                   interstitialAd: this._interstitialAd,
                 ),
