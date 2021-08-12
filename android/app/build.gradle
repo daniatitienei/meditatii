@@ -60,7 +60,7 @@ android {
 
     buildTypes {
         release {
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 }
@@ -78,4 +78,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
     implementation("com.android.support:multidex:1.0.3")
     implementation 'com.google.android.gms:play-services-ads:20.2.0'
+    implementation 'com.google.android.material:material:1.4.0'
 }

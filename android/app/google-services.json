@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "834293774562-5stbhacelcam65v0ei8875qmaakbsvcu.apps.googleusercontent.com",
+          "client_id": "834293774562-vhivgtlhr1e7naeo95li2f8f8bvlhucl.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.free.find_your_teacher",
-            "certificate_hash": "d5cb6763e022a1ef0ae671455d9abecfdfeab53e"
+            "certificate_hash": "9eb4ab9fe2c24f30cac4f8e84aa3c2437e06685b"
           }
         },
         {
@@ -40,7 +40,8 @@
             }
           ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-3178535762944426~2557423846"
     }
   ],
   "configuration_version": "1"
