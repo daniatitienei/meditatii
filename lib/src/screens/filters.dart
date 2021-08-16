@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
 import 'package:find_your_teacher/src/models/city.dart';
+import 'package:find_your_teacher/src/models/judete.dart';
 import 'package:find_your_teacher/src/models/typeOfFilters.dart';
 import 'package:find_your_teacher/src/widgets/searchableModal.dart';
 import 'package:flutter/material.dart';
@@ -162,14 +163,44 @@ class _FiltersState extends State<Filters> {
                               Searchable(
                                 data: listaOrase,
                                 defaultValue: Provider.of<TypeOfFilters>(
-                                        context,
-                                        listen: false)
-                                    .locatie,
+                                  context,
+                                  listen: false,
+                                ).locatie,
                                 callBack: (String newVal) {
                                   setState(() {
-                                    Provider.of<TypeOfFilters>(context,
-                                            listen: false)
-                                        .setLocatie = newVal;
+                                    Provider.of<TypeOfFilters>(
+                                      context,
+                                      listen: false,
+                                    ).setLocatie = newVal;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(top: 15),
+                                child: Text(
+                                  'Județ',
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                              Searchable(
+                                data: Judete().judete,
+                                defaultValue: Provider.of<TypeOfFilters>(
+                                  context,
+                                  listen: false,
+                                ).judet,
+                                callBack: (String newVal) {
+                                  setState(() {
+                                    Provider.of<TypeOfFilters>(
+                                      context,
+                                      listen: false,
+                                    ).setJudet = newVal;
                                   });
                                 },
                               ),

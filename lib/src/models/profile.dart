@@ -1,15 +1,16 @@
 class Profile {
-  final String uuid;
-  final String imgUrl;
-  final String tag;
-  final String firstName;
-  final String secondName;
-  final String email;
-  final String city;
-  final String description;
-  final String phoneNumber;
-  final String materie;
-  final int price;
+  String uuid;
+  String imgUrl;
+  String tag;
+  String firstName;
+  String secondName;
+  String email;
+  String city;
+  String description;
+  String phoneNumber;
+  String materie;
+  String judet;
+  int price;
 
   Profile({
     required this.uuid,
@@ -23,5 +24,6 @@ class Profile {
     required this.phoneNumber,
     required this.materie,
     required this.price,
+    required this.judet,
   });
 }

@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_your_teacher/src/models/editAnnouncementModel.dart';
+import 'package:find_your_teacher/src/models/professorProfile.dart';
 import 'package:find_your_teacher/src/models/profile.dart';
 import 'package:find_your_teacher/src/screens/home.dart';
 import 'package:find_your_teacher/src/screens/login.dart';
@@ -288,6 +290,114 @@ class MyFirebaseStorage {
 }
 
 class MyFirestore {
+  final firestore = FirebaseFirestore.instance;
+
+  void addProfessorProfile({
+    required String nume,
+    required String prenume,
+    required String email,
+    required String numar,
+    required String oras,
+    required String gen,
+    required String imageUrl,
+    required String judet,
+  }) {
+    firestore
+        .collection('users')
+        .doc(MyFirebaseAuth().auth.currentUser!.email)
+        .update(
+      {
+        'profil': {
+          'nume': nume,
+          'prenume': prenume,
+          'email': email,
+          'oras': oras,
+          'gen': gen,
+          'imgUrl': imageUrl,
+          'judet': judet,
+          'numar': numar,
+        }
+      },
+    );
+  }
+
+  Future<ProfessorProfile> getProfesorDetails() async {
+    ProfessorProfile? profile;
+
+    await firestore
+        .collection('users')
+        .doc(MyFirebaseAuth().auth.currentUser!.email)
+        .get()
+        .then(
+      (DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          final data = documentSnapshot.data() as Map;
+
+          if (data['profil'] != null) {
+            ProfessorProfile professorProfile = ProfessorProfile(
+              email: data['profil']['email'],
+              gen: data['profil']['gen'],
+              imgUrl: data['profil']['imgUrl'],
+              nume: data['profil']['nume'],
+              prenume: data['profil']['prenume'],
+              oras: data['profil']['oras'],
+              judet: data['profil']['judet'],
+              numar: data['profil']['numar'],
+            );
+
+            profile = professorProfile;
+          }
+        } else {
+          print('Document does not exist on the database');
+        }
+      },
+    );
+
+    return profile!;
+  }
+
+  Future<bool> hasProfessorProfile() async {
+    bool hasProfile = false;
+
+    await firestore
+        .collection('users')
+        .doc(MyFirebaseAuth().auth.currentUser!.email)
+        .get()
+        .then(
+      (DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          final data = documentSnapshot.data() as Map;
+
+          if (data['profil'] != null) hasProfile = true;
+        } else {
+          print('Document does not exist on the database');
+        }
+      },
+    );
+    return hasProfile;
+  }
+
+  Future<bool> isStudent() async {
+    bool isStudent = true;
+
+    await firestore
+        .collection('users')
+        .doc(MyFirebaseAuth().auth.currentUser!.email)
+        .get()
+        .then(
+      (DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          final data = documentSnapshot.data() as Map;
+
+          isStudent = data['isStudent'];
+        } else {
+          print('Document does not exist on the database');
+        }
+      },
+    );
+    return isStudent;
+  }
+
   void loadAnunturiLength() {
     final List<String> materii = [
       'Matematică',
@@ -309,35 +419,64 @@ class MyFirestore {
     ];
 
     for (int index = 0; index < materii.length; index++)
-      FirebaseFirestore.instance
+      firestore
           .collection('materii/${materii[index]}/anunturi')
           .get()
           .then((response) {
-        FirebaseFirestore.instance
-            .collection('materii')
-            .doc(materii[index])
-            .update({
+        firestore.collection('materii').doc(materii[index]).update({
           'anunturi': response.docs.length,
         });
       });
   }
 
-  removeAnnouncement(Profile profile) {
-    final favorite = FirebaseFirestore.instance.collection('users').get();
+  editAnnouncement(EditAnnouncementModel profile) {
+    final favorite = firestore.collection('users').get();
+
+    final homeAnnouncement = firestore
+        .doc('materii/${profile.materie}/anunturi/${profile.uuid}')
+        .update({
+      'descriere': profile.description,
+      'pret': profile.price,
+      'materie': profile.materie,
+    });
 
     favorite.then((QuerySnapshot doc) {
       doc.docs.forEach((user) {
-        FirebaseFirestore.instance
-            .doc('users/${user.id}/favorite/${profile.uuid}')
-            .delete();
+        firestore.doc('users/${user.id}/favorite/${profile.uuid}').update({
+          'descriere': profile.description,
+          'pret': profile.price,
+          'materie': profile.materie,
+        });
+        ;
       });
     });
 
-    final homeAnnouncement = FirebaseFirestore.instance
+    firestore
+        .doc(
+            'users/${MyFirebaseAuth().auth.currentUser!.email}/anunturi/${profile.uuid}')
+        .update({
+      'descriere': profile.description,
+      'pret': profile.price,
+      'materie': profile.materie,
+    });
+
+    MyFirestore().loadAnunturiLength();
+  }
+
+  removeAnnouncement(Profile profile) {
+    final favorite = firestore.collection('users').get();
+
+    favorite.then((QuerySnapshot doc) {
+      doc.docs.forEach((user) {
+        firestore.doc('users/${user.id}/favorite/${profile.uuid}').delete();
+      });
+    });
+
+    firestore
         .doc('materii/${profile.materie}/anunturi/${profile.uuid}')
         .delete();
 
-    final myAnnoucement = FirebaseFirestore.instance
+    firestore
         .doc(
             'users/${MyFirebaseAuth().auth.currentUser!.email}/anunturi/${profile.uuid}')
         .delete();
@@ -350,17 +489,17 @@ class MyFirestore {
   }
 
   Future<void> addAnnouncement(Profile profile) {
-    CollectionReference materii = FirebaseFirestore.instance
-        .collection('materii/${profile.materie}/anunturi');
+    CollectionReference materii =
+        firestore.collection('materii/${profile.materie}/anunturi');
 
-    CollectionReference user = FirebaseFirestore.instance.collection(
+    CollectionReference user = firestore.collection(
         'users/${MyFirebaseAuth().auth.currentUser!.email}/anunturi');
 
     return materii.doc(profile.uuid).set(
       {
         'uuid': profile.uuid,
-        'nume': profile.firstName.trim(),
-        'prenume': profile.secondName.trim(),
+        'nume': profile.secondName.trim(),
+        'prenume': profile.firstName.trim(),
         'descriere': profile.description,
         'materie': profile.materie,
         'oras': profile.city,
@@ -370,14 +509,15 @@ class MyFirestore {
         'tag': profile.tag,
         'email': profile.email,
         'date': DateTime.now(),
+        'judet': profile.judet,
       },
     ).then(
       (value) {
         MyFirestore().loadAnunturiLength();
         user.doc(profile.uuid).set({
           'uuid': profile.uuid,
-          'nume': profile.firstName.trim(),
-          'prenume': profile.secondName.trim(),
+          'nume': profile.secondName.trim(),
+          'prenume': profile.firstName.trim(),
           'descriere': profile.description,
           'materie': profile.materie,
           'oras': profile.city,
@@ -387,6 +527,7 @@ class MyFirestore {
           'tag': profile.tag,
           'email': profile.email,
           'date': DateTime.now(),
+          'judet': profile.judet,
         });
       },
     ).catchError((err) => print('nu a fost updatat'));
@@ -398,7 +539,7 @@ class MyFirestore {
   bool get getIsFav => _isFav;
 
   Future<void> isFavorite(Profile profile) {
-    final announce = FirebaseFirestore.instance
+    final announce = firestore
         .doc(
             'users/${MyFirebaseAuth().auth.currentUser!.email}/favorite/${profile.uuid}')
         .get()
@@ -410,7 +551,7 @@ class MyFirestore {
   }
 
   Future<void> newFavorite(Profile profile) {
-    CollectionReference user = FirebaseFirestore.instance.collection(
+    CollectionReference user = firestore.collection(
         'users/${MyFirebaseAuth().auth.currentUser!.email}/favorite');
     return user
         .doc(profile.uuid)
@@ -432,7 +573,7 @@ class MyFirestore {
   }
 
   Future<void> removeFavorite(Profile profile) {
-    final announce = FirebaseFirestore.instance
+    final announce = firestore
         .doc(
             'users/${MyFirebaseAuth().auth.currentUser!.email}/favorite/${profile.uuid}')
         .delete();

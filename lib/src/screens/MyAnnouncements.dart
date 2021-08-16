@@ -3,6 +3,8 @@ import 'package:find_your_teacher/src/admob/admob.dart';
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
 import 'package:find_your_teacher/src/models/profile.dart';
+import 'package:find_your_teacher/src/screens/editAnnouncement.dart';
+import 'package:find_your_teacher/src/widgets/goToEditAnn.dart';
 import 'package:find_your_teacher/src/widgets/professorItem.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -46,54 +48,6 @@ class _MyAnnouncementsState extends State<MyAnnouncements> {
       ),
     );
   }
-
-  Future<void> _deleteDialog(Profile profile) async => showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            'Doriți să ștergeți anunțul?',
-            style: GoogleFonts.montserrat(
-              color: MyColors().purple,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
-                  Colors.red,
-                ),
-              ),
-              child: Text(
-                'Nu',
-                style: GoogleFonts.montserrat(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
-                  MyColors().purple,
-                ),
-              ),
-              child: Text(
-                'Da',
-                style: GoogleFonts.montserrat(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              onPressed: () {
-                MyFirestore().removeAnnouncement(profile);
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ),
-      );
 
   @override
   Widget build(BuildContext context) {
@@ -153,6 +107,7 @@ class _MyAnnouncementsState extends State<MyAnnouncements> {
                       (BuildContext context, int index) {
                         final Profile profile = Profile(
                           uuid: snapshot.data!.docs[index]['uuid'],
+                          judet: snapshot.data!.docs[index]['judet'],
                           imgUrl: snapshot.data!.docs[index]['imgUrl'],
                           tag: snapshot.data!.docs[index]['tag'],
                           firstName: snapshot.data!.docs[index]['nume'],
@@ -166,7 +121,10 @@ class _MyAnnouncementsState extends State<MyAnnouncements> {
                         );
 
                         return ProfessorItem(
-                          onLongPress: () => _deleteDialog(profile),
+                          onLongPress: () => Navigator.of(context).pushNamed(
+                            GoToEditAnnouncement.routeName,
+                            arguments: profile,
+                          ),
                           profile: profile,
                         );
                       },

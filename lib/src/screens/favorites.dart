@@ -121,6 +121,7 @@ class _FavoritesState extends State<Favorites> {
                     (BuildContext context, int index) {
                       final Profile profile = Profile(
                         uuid: snapshot.data!.docs[index]['uuid'],
+                        judet: snapshot.data!.docs[index]['judet'],
                         imgUrl: snapshot.data!.docs[index]['imgUrl'],
                         tag: snapshot.data!.docs[index]['tag'],
                         firstName: snapshot.data!.docs[index]['nume'],

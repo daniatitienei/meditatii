@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 class TypeOfFilters with ChangeNotifier {
   String _ordonare = 'Noi';
   String _locatie = 'Oriunde';
+  String _judet = 'Oriunde';
 
   int defaultNumber = 2;
 
@@ -27,6 +28,11 @@ class TypeOfFilters with ChangeNotifier {
     notifyListeners();
   }
 
+  set setJudet(String newValue) {
+    _judet = newValue;
+    notifyListeners();
+  }
+
   getVariableName() => _ordonare.toLowerCase() == 'noi' ? 'date' : 'pret';
 
   getBoolForValue() {
@@ -38,4 +44,6 @@ class TypeOfFilters with ChangeNotifier {
   get ordonare => _ordonare;
 
   get locatie => _locatie;
+
+  get judet => _judet;
 }

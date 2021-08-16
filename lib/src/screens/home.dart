@@ -91,16 +91,12 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
 
-    Future.delayed(
-      Duration.zero,
-      () async {
-        await auth.setIsStudent(auth.auth.currentUser!.email);
+    MyFirestore().isStudent().then((bool response) {
+      setState(
+        () => this.isStudent = response,
+      );
+    });
 
-        setState(() {
-          this.isStudent = auth.isStudent();
-        });
-      },
-    );
     myBanner.load();
     InterstitialAd.load(
       adUnitId: AdMob().interstitialAdId,
@@ -139,26 +135,30 @@ class _HomeState extends State<Home> {
         stream: _materiiStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
-            return Container(
-              height: MediaQuery.of(context).size.height,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemBuilder: (context, index) => Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  child: ListTileShimmer(
-                    hasCustomColors: true,
-                    height: 20,
-                    colors: [
-                      // Dark color
-                      Colors.grey.shade400,
-                      // light color
-                      Colors.grey.shade200,
-                      // Medium color
-                      Colors.grey.shade300,
-                    ],
-                  ),
+            return SafeArea(
+              child: Container(
+                margin: EdgeInsets.only(top: 120),
+                height: MediaQuery.of(context).size.height,
+                child: Column(
+                  children: [
+                    for (int i = 0; i < 4; i++)
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        child: ListTileShimmer(
+                          hasCustomColors: true,
+                          height: 15,
+                          colors: [
+                            // Dark color
+                            Colors.grey.shade400,
+                            // light color
+                            Colors.grey.shade200,
+                            // Medium color
+                            Colors.grey.shade300,
+                          ],
+                        ),
+                      ),
+                  ],
                 ),
-                itemCount: 10,
               ),
             );
 
@@ -224,8 +224,10 @@ class _HomeState extends State<Home> {
                       sliver: SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) => Materie(
-                            circleColor: MyColors().circleColors[index],
-                            backgroundColor: MyColors().backgroundColors[index],
+                            circleColor: Color(
+                                snapshot.data?.docs[index]['circleColor']),
+                            backgroundColor: Color(
+                                snapshot.data?.docs[index]['backgroundColor']),
                             title: snapshot.data!.docs[index].id,
                             announces: snapshot.data?.docs[index]['anunturi'],
                             imageUrl: snapshot.data!.docs[index]['imageUrl'],

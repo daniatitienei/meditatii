@@ -70,10 +70,18 @@ class _SelectedCategoryState extends State<SelectedCategory> {
 
     final Stream<QuerySnapshot> _anunturiStream = FirebaseFirestore.instance
         .collection('materii/${args.title}/anunturi')
-        .where('oras',
-            isEqualTo: Provider.of<TypeOfFilters>(context).locatie == 'Oriunde'
-                ? null
-                : Provider.of<TypeOfFilters>(context).locatie)
+        .where(
+          'judet',
+          isEqualTo: Provider.of<TypeOfFilters>(context).judet == 'Oriunde'
+              ? null
+              : Provider.of<TypeOfFilters>(context).judet,
+        )
+        .where(
+          'oras',
+          isEqualTo: Provider.of<TypeOfFilters>(context).locatie == 'Oriunde'
+              ? null
+              : Provider.of<TypeOfFilters>(context).locatie,
+        )
         .orderBy(
           Provider.of<TypeOfFilters>(context).getVariableName(),
           descending: Provider.of<TypeOfFilters>(context).getBoolForValue(),
@@ -177,6 +185,7 @@ class _SelectedCategoryState extends State<SelectedCategory> {
                             phoneNumber: snapshot.data!.docs[index]['numar'],
                             materie: snapshot.data!.docs[index]['materie'],
                             price: snapshot.data!.docs[index]['pret'],
+                            judet: snapshot.data!.docs[index]['judet'],
                           ),
                         );
                       },

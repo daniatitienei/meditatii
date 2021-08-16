@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:find_your_teacher/src/admob/admob.dart';
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
+import 'package:find_your_teacher/src/screens/createProfile.dart';
 import 'package:find_your_teacher/src/screens/home.dart';
 import 'package:find_your_teacher/src/screens/login.dart';
 import 'package:find_your_teacher/src/screens/selectType.dart';
@@ -63,8 +64,8 @@ class RegisterState extends State<Register> {
               reverseCurve: Curves.linear,
             );
 
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil(Home.routeName, (route) => false);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                CreateProfile.routeName, (route) => false);
           },
           style: ButtonStyle(
             padding: MaterialStateProperty.all(

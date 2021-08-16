@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
-import 'package:find_your_teacher/src/screens/MyAnnouncements.dart';
+import 'package:find_your_teacher/src/screens/myAnnouncements.dart';
+import 'package:find_your_teacher/src/screens/createProfile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

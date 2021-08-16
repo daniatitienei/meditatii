@@ -18,7 +18,6 @@ class Searchable extends StatefulWidget {
   @override
   _SearchableState createState() => _SearchableState();
 }
-// TODO SA DEA VALOAREA INAPOI
 
 class _SearchableState extends State<Searchable> {
   final TextEditingController _searchController = TextEditingController();

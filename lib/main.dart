@@ -3,16 +3,21 @@ import 'package:find_your_teacher/src/assets/colors/colors.dart';
 import 'package:find_your_teacher/src/firebase/firebase.dart';
 import 'package:find_your_teacher/src/models/typeOfFilters.dart';
 import 'package:find_your_teacher/src/screens/Announcement.dart';
-import 'package:find_your_teacher/src/screens/MyAnnouncements.dart';
+import 'package:find_your_teacher/src/screens/editAnnouncement.dart';
+import 'package:find_your_teacher/src/screens/myAnnouncements.dart';
+import 'package:find_your_teacher/src/screens/createProfile.dart';
 import 'package:find_your_teacher/src/screens/favorites.dart';
 import 'package:find_your_teacher/src/screens/filters.dart';
 import 'package:find_your_teacher/src/screens/forgotPassword.dart';
 import 'package:find_your_teacher/src/screens/home.dart';
 import 'package:find_your_teacher/src/screens/inspectProfessor.dart';
 import 'package:find_your_teacher/src/screens/login.dart';
+import 'package:find_your_teacher/src/screens/redirect.dart';
 import 'package:find_your_teacher/src/screens/register.dart';
 import 'package:find_your_teacher/src/screens/selectType.dart';
 import 'package:find_your_teacher/src/screens/selectedCategory.dart';
+import 'package:find_your_teacher/src/widgets/goToEditAnn.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -42,8 +47,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-
   @override
   Widget build(BuildContext context) {
     Theme.of(context).textTheme.apply(
@@ -80,22 +83,17 @@ class _MyAppState extends State<MyApp> {
         ForgotPassword.routeName: (context) => ForgotPassword(),
         MyAnnouncements.routeName: (context) => MyAnnouncements(),
         SelectType.routeName: (context) => SelectType(),
+        CreateProfile.routeName: (context) => CreateProfile(),
+        GoToEditAnnouncement.routeName: (context) => GoToEditAnnouncement(),
       },
       home: FutureBuilder(
-        future: _initialization,
+        future: Firebase.initializeApp(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done &&
-              !MyFirebaseAuth().isSignedIn())
-            return SelectType();
-          else if (snapshot.connectionState == ConnectionState.done &&
-              MyFirebaseAuth().isSignedIn()) return Home();
+          if (snapshot.connectionState == ConnectionState.done)
+            return Redirect();
           return Center(
-            child: MaterialApp(
-              home: Scaffold(
-                body: CircularProgressIndicator(
-                  color: MyColors().purple,
-                ),
-              ),
+            child: CircularProgressIndicator(
+              color: MyColors().purple,
             ),
           );
         },
